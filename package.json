@@ -1,6 +1,6 @@
 {
 	"name": "gatsby-source-notion-api",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "Gatsby source plugin for official Notion.so API",
 	"main": "index.js",
 	"publishConfig": {
@@ -10,8 +10,8 @@
 	"scripts": {
 		"test": "ava",
 		"test:cover": "nyc ava",
-		"format": "prettier --write *.{js,json,md} **/*.{js,json,md} **/**/*.{js,json,md}",
-		"lint": "prettier -c *.{js,json,md} **/*.{js,json,md} **/**/*.{js,json,md}",
+		"format": "prettier --write *.{js,json} **/*.{js,json} **/**/*.{js,json}",
+		"lint": "prettier -c *.{js,json} **/*.{js,json} **/**/*.{js,json}",
 		"commit": "gitmoji --commit",
 		"build": "echo \"No build script setup\""
 	},
@@ -20,16 +20,16 @@
 		"gatsby-plugin",
 		"notion"
 	],
-	"author": "Sergei Orlov <hello@orlow.dev> (https://orlow.dev/)",
+	"author": "Seunghwan Ethan Lee",
 	"license": "0BSD",
-	"homepage": "https://github.com/orlowdev/gatsby-source-notion-api",
+	"homepage": "https://github.com/dearlsh94/gatsby-source-notion-api",
 	"bugs": {
-		"email": "hello@orlow.dev",
-		"url": "https://github.com/orlowdev/gatsby-source-notion-api/issues"
+		"email": "dearlsh94@gmail.com",
+		"url": "https://github.com/dearlsh94/gatsby-source-notion-api/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+ssh://git@github.com/orlowdev/gatsby-source-notion-api.git"
+		"url": "git+ssh://git@github.com/dearlsh94/gatsby-source-notion-api.git"
 	},
 	"dependencies": {
 		"node-fetch": "^2.6.1",
