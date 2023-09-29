@@ -1,4 +1,4 @@
-# Based [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api)
+forked from [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api)
 
 
 <p align="center">
