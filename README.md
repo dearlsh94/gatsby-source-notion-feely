@@ -1,5 +1,9 @@
-forked from [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api)
+## Test Setup
 
+1. add `.env.test`
+2. add NOTION_INTEGRATION_TOKEN, NOTION_DB_ID variables in env
+
+based [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api)
 
 <p align="center">
   <a href="https://www.gatsbyjs.com">
