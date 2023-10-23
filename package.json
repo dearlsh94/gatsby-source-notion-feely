@@ -1,5 +1,5 @@
 {
-	"name": "gatsby-source-notion-api",
+	"name": "gatsby-source-notion-feely",
 	"version": "0.0.1",
 	"description": "Gatsby source plugin for official Notion.so API",
 	"main": "index.js",

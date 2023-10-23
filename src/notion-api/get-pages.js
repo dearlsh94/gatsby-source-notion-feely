@@ -2,32 +2,16 @@ const fetch = require("node-fetch")
 const { errorMessage } = require("../error-message")
 const { getBlocks } = require("./get-blocks")
 
-async function fetchPageChildren({ page, token, notionVersion }, reporter, cache) {
-	let cacheKey = `notionApiPageChildren:${page.id}:${page.last_edited_time}`
-
-	let children = await cache.get(cacheKey)
-
-	if (children) {
-		return children
-	}
-
-	children = await getBlocks({ id: page.id, token, notionVersion }, reporter)
-	await cache.set(cacheKey, children)
-	return children
-}
-
-exports.getPages = async (
-	{ token, databaseId, notionVersion = "2021-05-13", checkPublish },
-	reporter,
-	cache,
-) => {
-	let hasMore = true
-	let startCursor = ""
+async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersion }, reporter) {
 	const url = `https://api.notion.com/v1/databases/${databaseId}/query`
 	const body = {
 		filter: {
 			and: [],
 		},
+	}
+
+	if (cursor) {
+		body.start_cursor = cursor
 	}
 
 	if (checkPublish) {
@@ -39,33 +23,65 @@ exports.getPages = async (
 		})
 	}
 
+	try {
+		const result = await fetch(url, {
+			method: "POST",
+			body: JSON.stringify(body),
+			headers: {
+				"Content-Type": "application/json",
+				"Notion-Version": notionVersion,
+				Authorization: `Bearer ${token}`,
+			},
+		}).then((res) => res.json())
+		return result
+	} catch (error) {
+		reporter.error(error)
+	}
+}
+
+async function fetchPageChildren({ page, token, notionVersion }, reporter, cache) {
+	let cacheKey = `notionApiPageChildren:${page.id}:${page.last_edited_time}`
+
+	let children = await cache.get(cacheKey)
+
+	if (children) {
+		return children
+	}
+
+	children = await getBlocks({ id: page.id, token, notionVersion, cacheKey }, reporter, cache)
+	await cache.set(cacheKey, children)
+	return children
+}
+
+exports.getPages = async (
+	{ token, databaseId, notionVersion = "2021-05-13", checkPublish },
+	reporter,
+	cache,
+) => {
+	let hasMore = true
+	let startCursor = ""
+
 	const pages = []
 
 	while (hasMore) {
-		if (startCursor) {
-			body.start_cursor = startCursor
-		}
-
 		try {
-			const result = await fetch(url, {
-				method: "POST",
-				body: JSON.stringify(body),
-				headers: {
-					"Content-Type": "application/json",
-					"Notion-Version": notionVersion,
-					Authorization: `Bearer ${token}`,
-				},
-			}).then((res) => res.json())
+			const result = await fetchPage(
+				{ cursor: startCursor, token, databaseId, checkPublish, notionVersion },
+				reporter,
+				cache,
+			)
 
 			startCursor = result.next_cursor
 			hasMore = result.has_more
 
 			for (let page of result.results) {
-				// page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache)
+				page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache)
 				pages.push(page)
+
+				break
 			}
 		} catch (e) {
-			console.error(e)
+			reporter.error(e)
 		}
 	}
 
