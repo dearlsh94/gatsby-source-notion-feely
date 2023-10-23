@@ -8,8 +8,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"test": "ava",
-		"test:cover": "nyc ava",
+		"test": "jest",
 		"format": "prettier --write *.{js,json} **/*.{js,json} **/**/*.{js,json}",
 		"lint": "prettier -c *.{js,json} **/*.{js,json} **/**/*.{js,json}",
 		"commit": "gitmoji --commit",
@@ -20,7 +19,7 @@
 		"gatsby-plugin",
 		"notion"
 	],
-	"author": "Seunghwan Ethan Lee",
+	"author": "Ethan",
 	"license": "0BSD",
 	"homepage": "https://github.com/dearlsh94/gatsby-source-notion-api",
 	"bugs": {
@@ -37,9 +36,13 @@
 		"yaml": "^1.10.2"
 	},
 	"devDependencies": {
-		"ava": "^3.15.0",
+		"babel-jest": "^29.7.0",
+		"babel-preset-gatsby": "^3.12.0",
+		"dotenv": "^16.3.1",
 		"gitmoji-cli": "^4.1.0",
 		"husky": "^6.0.0",
+		"identity-obj-proxy": "^3.0.0",
+		"jest": "^29.7.0",
 		"nyc": "^15.1.0",
 		"prettier": "^2.3.0",
 		"sinon": "^10.0.0",
@@ -58,22 +61,6 @@
 		"useTabs": true,
 		"tabWidth": 1,
 		"bracketSpacing": true
-	},
-	"ava": {
-		"files": [
-			"test/**/*"
-		],
-		"extensions": [
-			"js"
-		],
-		"concurrency": 5,
-		"failFast": true,
-		"failWithoutAssertions": false,
-		"verbose": true,
-		"nodeArguments": [
-			"--trace-deprecation",
-			"--napi-modules"
-		]
 	},
 	"nyc": {
 		"reporter": [
