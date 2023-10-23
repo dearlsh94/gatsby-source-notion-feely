@@ -3,8 +3,17 @@ import { getPages } from "../src/notion-api/get-pages"
 
 describe("Notion Test", () => {
 	const mockReporter = {
-		error(error) {
-			console.error(error)
+		info(message) {
+			console.info(message)
+		},
+		warn(message) {
+			console.warn(message)
+		},
+		error(message, error) {
+			console.error(message, error)
+		},
+		panic(message, error) {
+			console.panic(message, error)
 		},
 	}
 	const mockCache = new Map()
