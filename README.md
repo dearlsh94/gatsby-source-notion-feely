@@ -1,3 +1,9 @@
+## Option
+
+3. `checkPublish`: boolean. default `false`
+- This option ensures that only pages with the "is_published" checkbox column checked are retrieved from the notion database.
+- If you use this option, you must create a checkbox column in your notion database named "is_published"
+
 ## Test Setup
 
 1. add `.env.test`

@@ -16,12 +16,27 @@ async function fetchPageChildren({ page, token, notionVersion }, reporter, cache
 	return children
 }
 
-exports.getPages = async ({ token, databaseId, notionVersion = "2021-05-13" }, reporter, cache) => {
+exports.getPages = async (
+	{ token, databaseId, notionVersion = "2021-05-13", checkPublish },
+	reporter,
+	cache,
+) => {
 	let hasMore = true
 	let startCursor = ""
 	const url = `https://api.notion.com/v1/databases/${databaseId}/query`
 	const body = {
-		page_size: 100,
+		filter: {
+			and: [],
+		},
+	}
+
+	if (checkPublish) {
+		body.filter.and.push({
+			property: "is_published",
+			checkbox: {
+				equals: true,
+			},
+		})
 	}
 
 	const pages = []
@@ -46,11 +61,11 @@ exports.getPages = async ({ token, databaseId, notionVersion = "2021-05-13" }, r
 			hasMore = result.has_more
 
 			for (let page of result.results) {
-				page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache)
+				// page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache)
 				pages.push(page)
 			}
 		} catch (e) {
-			console.error(e);
+			console.error(e)
 		}
 	}
 

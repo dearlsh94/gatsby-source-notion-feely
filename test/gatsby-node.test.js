@@ -15,13 +15,12 @@ describe("Notion Test", () => {
 				token: process.env.NOTION_INTEGRATION_TOKEN,
 				databaseId: process.env.NOTION_DB_ID,
 				notionVersion: "2022-06-28",
+				checkPublish: true,
 			},
 			mockReporter,
 			mockCache,
 		)
-
-		test("조회 된 목록이 있다.", () => {
-			expect(res.length).toBeGreaterThan(0)
-		})
+		
+		expect(res.length).toBeGreaterThan(0)
 	})
 })
