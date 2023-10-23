@@ -16,7 +16,20 @@ describe("Notion Test", () => {
 			console.panic(message, error)
 		},
 	}
-	const mockCache = new Map()
+	const cache = new Map()
+	const mockCache = {
+		async get(key) {
+			new Promise((resolve) => {
+				resolve(cache.get(key))
+			})
+		},
+		async set(key, data) {
+			new Promise((resolve) => {
+				cache.set(key, data)
+				resolve(cache)
+			})
+		},
+	}
 
 	test(
 		"Get Pages",
