@@ -1,6 +1,7 @@
 const fetch = require("node-fetch")
 const { errorMessage } = require("../error-message")
 const { getBlocks } = require("./get-blocks")
+const { getNotionPageTitle } = require("../transformers/get-page-title")
 
 async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersion }, reporter) {
 	const url = `https://api.notion.com/v1/databases/${databaseId}/query`
@@ -47,16 +48,19 @@ async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersio
 }
 
 async function fetchPageChildren({ page, token, notionVersion }, reporter, cache) {
-	let cacheKey = `notionApiPageChildren:${page.id}:${page.last_edited_time}`
+	const title = getNotionPageTitle(page)
+	const cacheKey = `notionApiPageChildren:${page.id}:${page.last_edited_time}`
 
 	let children = await cache.get(cacheKey)
 
 	if (children) {
+		reporter.info(`[SUCCESS] Get Cached Page > ${title}`)
 		return children
 	}
 
 	children = await getBlocks({ id: page.id, token, notionVersion, cacheKey }, reporter, cache)
 	await cache.set(cacheKey, children)
+	reporter.info(`[SUCCESS] Get Page > ${title}`)
 	return children
 }
 
@@ -71,22 +75,18 @@ exports.getPages = async (
 	const pages = []
 
 	while (hasMore) {
-		try {
-			const result = await fetchPage(
-				{ cursor: startCursor, token, databaseId, checkPublish, notionVersion },
-				reporter,
-				cache,
-			)
+		const result = await fetchPage(
+			{ cursor: startCursor, token, databaseId, checkPublish, notionVersion },
+			reporter,
+			cache,
+		)
 
-			startCursor = result.next_cursor
-			hasMore = result.has_more
+		startCursor = result.next_cursor
+		hasMore = result.has_more
 
-			for (let page of result.results) {
-				page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache)
-				pages.push(page)
-			}
-		} catch (e) {
-			reporter.error(e)
+		for (let page of result.results) {
+			page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache)
+			pages.push(page)
 		}
 	}
 
