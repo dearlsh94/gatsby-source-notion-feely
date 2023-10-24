@@ -53,12 +53,12 @@
 		}
 	},
 	"prettier": {
-		"printWidth": 100,
+		"printWidth": 120,
 		"trailingComma": "all",
 		"singleQuote": false,
-		"semi": false,
+		"semi": true,
 		"useTabs": true,
-		"tabWidth": 1,
+		"tabWidth": 2,
 		"bracketSpacing": true
 	},
 	"nyc": {

@@ -1,18 +1,18 @@
-const { getPages } = require("./src/notion-api/get-pages")
-const { getNotionPageProperties } = require("./src/transformers/get-page-properties")
-const { getNotionPageTitle } = require("./src/transformers/get-page-title")
+const { getPages } = require("./src/notion-api/get-pages");
+const { getNotionPageProperties } = require("./src/transformers/get-page-properties");
+const { getNotionPageTitle } = require("./src/transformers/get-page-title");
 
-const NOTION_NODE_TYPE = "Notion"
+const NOTION_NODE_TYPE = "Notion";
 
 exports.sourceNodes = async (
 	{ actions, createNodeId, reporter, cache },
 	{ token, databaseId, checkPublish = false },
 ) => {
-	const pages = await getPages({ token, databaseId, checkPublish }, reporter, cache)
+	const pages = await getPages({ token, databaseId, checkPublish }, reporter, cache);
 
 	pages.forEach((page) => {
-		const title = getNotionPageTitle(page)
-		const properties = getNotionPageProperties(page)
+		const title = getNotionPageTitle(page);
+		const properties = getNotionPageProperties(page);
 
 		actions.createNode({
 			id: createNodeId(`${NOTION_NODE_TYPE}-${page.id}`),
@@ -25,6 +25,6 @@ exports.sourceNodes = async (
 			json: JSON.stringify(page),
 			parent: null,
 			children: [],
-		})
-	})
-}
+		});
+	});
+};

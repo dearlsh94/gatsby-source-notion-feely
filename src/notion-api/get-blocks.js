@@ -1,13 +1,13 @@
-const fetch = require("node-fetch")
-const { errorMessage } = require("../error-message")
+const fetch = require("node-fetch");
+const { errorMessage } = require("../error-message");
 
-let tryCount = 0
+let tryCount = 0;
 async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
-	tryCount++
-	let url = `https://api.notion.com/v1/blocks/${id}/children`
+	tryCount++;
+	let url = `https://api.notion.com/v1/blocks/${id}/children`;
 
 	if (cursor) {
-		url += `?start_cursor=${cursor}`
+		url += `?start_cursor=${cursor}`;
 	}
 
 	try {
@@ -17,43 +17,43 @@ async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
 				"Notion-Version": notionVersion,
 				Authorization: `Bearer ${token}`,
 			},
-		}).then((res) => res.json())
+		}).then((res) => res.json());
 
-		const { object, status } = result
+		const { object, status } = result;
 		if (object === "error") {
 			// rate_limited
 			if (status === 429) {
 				const sleep = (ms) => {
-					const wakeUpTime = Date.now() + ms
+					const wakeUpTime = Date.now() + ms;
 					while (Date.now() < wakeUpTime) {}
-				}
+				};
 
 				while (tryCount <= 5) {
-					reporter.warn(`[${status}] rate limited! retry after 15s (${tryCount}/5)`)
-					sleep(1000 * 15)
-					return await fetchBlocks({ id, notionVersion, token }, reporter)
+					reporter.warn(`[${status}] rate limited! retry after 15s (${tryCount}/5)`);
+					sleep(1000 * 15);
+					return await fetchBlocks({ id, notionVersion, token }, reporter);
 				}
 			}
-			throw new Error(`[${status}] ${errorMessage}`)
+			throw new Error(`[${status}] ${errorMessage}`);
 		}
 
-		return result
+		return result;
 	} catch (error) {
-		reporter.error(error)
+		reporter.error(error);
 		return {
 			results: [],
 			has_children: false,
-		}
+		};
 	}
 }
 
 exports.getBlocks = async ({ id, token, notionVersion = "2022-06-28" }, reporter) => {
-	let hasMore = true
-	let blockContent = []
-	let startCursor = ""
+	let hasMore = true;
+	let blockContent = [];
+	let startCursor = "";
 
 	while (hasMore) {
-		tryCount = 0
+		tryCount = 0;
 		const result = await fetchBlocks(
 			{
 				id,
@@ -62,19 +62,19 @@ exports.getBlocks = async ({ id, token, notionVersion = "2022-06-28" }, reporter
 				cursor: startCursor,
 			},
 			reporter,
-		)
+		);
 
 		for (let childBlock of result.results) {
 			if (childBlock.has_children) {
-				tryCount = 0
-				childBlock.children = await fetchBlocks({ id: childBlock.id, notionVersion, token }, reporter)
+				tryCount = 0;
+				childBlock.children = await fetchBlocks({ id: childBlock.id, notionVersion, token }, reporter);
 			}
 		}
 
-		blockContent = blockContent.concat(result.results)
-		startCursor = result.next_cursor
-		hasMore = result.has_more
+		blockContent = blockContent.concat(result.results);
+		startCursor = result.next_cursor;
+		hasMore = result.has_more;
 	}
 
-	return blockContent
-}
+	return blockContent;
+};
