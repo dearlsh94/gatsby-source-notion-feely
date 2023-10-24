@@ -17,6 +17,11 @@ async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
 			},
 		}).then((res) => res.json())
 
+		const { object, status } = result
+		if (object === "error") {
+			throw new Error(`[${status}] ${errorMessage}`)
+		}
+
 		return result
 	} catch (error) {
 		reporter.error(error)

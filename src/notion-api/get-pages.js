@@ -33,6 +33,13 @@ async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersio
 				Authorization: `Bearer ${token}`,
 			},
 		}).then((res) => res.json())
+
+		const { object, status } = result
+		if (object === "error") {
+			throw new Error(`[${status}] ${errorMessage}`)
+		}
+
+		reporter.info(`[SUCCESS] Total Pages > ${result.results.length}`)
 		return result
 	} catch (error) {
 		reporter.error(error)
