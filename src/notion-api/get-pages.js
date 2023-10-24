@@ -92,6 +92,7 @@ exports.getPages = async (
 		for (let page of result.results) {
 			page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache)
 			pages.push(page)
+			break;
 		}
 	}
 
