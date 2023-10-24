@@ -28,7 +28,7 @@ async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
 	}
 }
 
-exports.getBlocks = async ({ id, notionVersion, token }, reporter) => {
+exports.getBlocks = async ({ id, token, notionVersion = "2022-06-28" }, reporter) => {
 	let hasMore = true
 	let blockContent = []
 	let startCursor = ""

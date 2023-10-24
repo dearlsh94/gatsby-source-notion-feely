@@ -61,7 +61,7 @@ async function fetchPageChildren({ page, token, notionVersion }, reporter, cache
 }
 
 exports.getPages = async (
-	{ token, databaseId, notionVersion = "2021-05-13", checkPublish },
+	{ databaseId, token, notionVersion = "2022-06-28", checkPublish },
 	reporter,
 	cache,
 ) => {
