@@ -48,9 +48,10 @@ describe("Run Test", () => {
 				},
 				{
 					token: process.env.NOTION_INTEGRATION_TOKEN,
-					databaseId: process.env.NOTION_DB_ID,
+					databaseIds: [process.env.NOTION_DB_ID, process.env.NOTION_DB_ID_2],
+					aliases: ['Book', 'Movie'],
+					checkPublish: [true, false],
 					notionVersion: "2022-06-28",
-					checkPublish: true,
 				},
 			);
 		},

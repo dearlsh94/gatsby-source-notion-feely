@@ -6,6 +6,7 @@ const { getNotionPageTitle } = require("../transformers/get-page-title");
 async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersion }, reporter) {
 	const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
 	const body = {
+		page_size: 100,
 		filter: {
 			and: [],
 		},
@@ -88,6 +89,7 @@ exports.getPages = async ({ databaseId, token, notionVersion = "2022-06-28", che
 		for (let page of result.results) {
 			page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache);
 			pages.push(page);
+			break;
 		}
 	}
 
