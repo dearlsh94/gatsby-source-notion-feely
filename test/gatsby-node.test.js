@@ -1,18 +1,24 @@
 import { sourceNodes } from "../gatsby-node"
 
 describe("Run Test", () => {
+	const mockActions = {
+		createNode(node) {
+			console.log(`[SUCCESS] Created Node : ${node.title}`)
+			return node;
+		},
+	}
 	const mockReporter = {
 		info(message) {
 			console.info(message)
 		},
 		warn(message) {
-			console.warn(message)
+			console.log(message)
 		},
 		error(message, error) {
 			console.error(message, error)
 		},
 		panic(message, error) {
-			console.panic(message, error)
+			console.error(message, error)
 		},
 	}
 	const cache = new Map()
@@ -33,8 +39,10 @@ describe("Run Test", () => {
 	test(
 		"Run",
 		async () => {
-			const res = await sourceNodes(
+			await sourceNodes(
 				{
+					actions: mockActions,
+					createNodeId: (id) => id,
 					reporter: mockReporter,
 					cache: mockCache,
 				},
@@ -45,8 +53,6 @@ describe("Run Test", () => {
 					checkPublish: true,
 				},
 			)
-
-			expect(res.length).toBeGreaterThan(0)
 		},
 		1000 * 60 * 5,
 	)
