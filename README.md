@@ -1,278 +1,147 @@
-## Option
-
-3. `checkPublish`: boolean. default `false`
-- This option ensures that only pages with the "is_published" checkbox column checked are retrieved from the notion database.
-- If you use this option, you must create a checkbox column in your notion database named "is_published"
-
-## Test Setup
-
-1. add `.env.test`
-2. add NOTION_INTEGRATION_TOKEN, NOTION_DB_ID variables in env
-
-based [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api)
-
 <p align="center">
   <a href="https://www.gatsbyjs.com">
     <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
   </a>
 </p>
 <h1 align="center">
-  Gatsby Source Plugin Notion API
+  Gatsby + Notion = ✨
 </h1>
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/669015699caf1728d984/maintainability)](https://codeclimate.com/github/orlowdev/gatsby-source-notion-api/maintainability)
+## 소개
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![versioning: or-release](https://img.shields.io/badge/versioning-%7C%7Cr-E76D83.svg)](https://github.com/orlowdev/or-release)
+Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하기 위한 목적의 플러그인입니다. 손쉽게 Gatsby에 Notion Database API를 연결하여 GraphQL로 조회할 수 있습니다.
 
-Gatsby source plugin for working with official [Notion](https://notion.so) API.
+[orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api) 플러그인을 fork하여 개발되었습니다.
 
-Here's a [Postman](https://www.postman.com/) collection to play around with the API if you're interested: [https://www.postman.com/notionhq/workspace/notion-s-public-api-workspace/overview](https://www.postman.com/notionhq/workspace/notion-s-public-api-workspace/overview)
+[Weezip](https://weezip.treefeely.com) 블로그 서비스에 사용하고 있습니다.
 
-## 🚧 It's a work in progress
+### 참고
 
-This is a source plugin for pulling content into Gatsby from official public Notion API (currently
-in beta). With this plugin, you will be able to query your Notion pages in Gatsby using GraphQL.
+- [Notion API Reference](https://developers.notion.com/reference/intro)
+- [Notion API Databases](https://developers.notion.com/docs/working-with-databases)
 
-[Notion API Reference](https://developers.notion.com/reference/intro)
+## 안내
 
-[An example](https://gatsby-source-notion-api-demo.netlify.app)
+- 마크다운 양식은 지원하고 있지 않습니다. (추후 지원 예정)
+- 1개의 Notion Database만 연결이 가능합니다. (추후 지원 예정)
+- Notion의 공식 API `2022-06-28` 버전을 사용합니다.
+- Notion의 자체적인 [request-limits](https://developers.notion.com/reference/request-limits) 제한으로 인해 오류가 발생하는 경우 15초 간격으로 최대 4번까지 추가로 호출합니다. (총 5번)
 
-[Here's my blog running on gatsby-source-notion-api](https://orlow.dev)
-
-## Features
-
-- Get your Notion pages in Gatsby via GraphQL
-- Convenient access to page properties
-- Page contents in Markdown!
-- Normalised page title
-- All blocks styling represented in Markdown:
-  - **bold** (`**$VALUE**`)
-  - _italic_ (`_$VALUE_`)
-  - ~~strikethrough~~ (`~~$VALUE~~`)
-  - <u>underline</u> (`<u>$VALUE</u>`)
-  - `code` (`$VALUE`)
-  - color 🤷 (`<span notion-color="$COLOR">$VALUE</span>`)
-- Access to raw data returned by Notion API
-- Support for `markdown-remark` and `mdx`
-
-## Install
+## 설치
 
 ```sh
-yarn add gatsby-source-notion-api
+yarn add gatsby-source-notion-feely
 ```
 
 or
 
 ```sh
-npm install --save gatsby-source-notion-api
+npm install --save gatsby-source-notion-feely
 ```
 
-## How to use
+## 필수
 
-Before using this plugin, make sure you
+- `token` : [string] [required]
+  - 노션에서 발급받은 토큰 키
+- `databaseId` : [string] [required]
+  - 사용할 데이터베이스 ID
 
-1. Created a Notion integration (sign in to Notion, go to `Settings & Memberships` → `Integrations`
-   → `Develop your own integrations`,
-   [short link to the Integrations creation section](https://www.notion.so/my-integrations)). It's
-   OK to use an internal one. Don't forget to copy the token:
-   ![Notion integration creation GIF](https://files.readme.io/2ec137d-093ad49-create-integration.gif)
-2. Go to the database you want to have access to from Gatsby, and share it with the integration (`Share` → Select
-   the integration in the `Invite` dropdown). Don't forget the database in the URL. It's a series of
-   characters after the last slash and before the question mark.
-   ![Notion integration sharing GIF](https://files.readme.io/0a267dd-share-database-with-integration.gif)
-   Here's a reference:
-   https://www.notion.so/{USER}/**{DATABASE_ID}**?{someotherirrelevantstuff}
+## 추가 옵션
 
-Then add this to your `gatsby-config.json`:
+- `checkPublish` : [boolean] [default `false`]
+  - 사용하는 노션 데이터베이스에 checkbox 타입의 `is_published` 컬럼을 생성해야 합니다.
+  - 해당 옵션이 true일 경우, `is_published` 값이 true인 데이터만 조회합니다.
 
-```javascript
-plugins: [
-	{
-		resolve: `gatsby-source-notion-api`,
-		options: {
-			token: `$INTEGRATION_TOKEN`,
-			databaseId: `$DATABASE_ID`,
-			propsToFrontmatter: true,
-			lowerTitleLevel: true,
-		},
-	},
-	// ...
-]
-```
+## 테스트
 
-## Configuration options
+Jest를 사용하고 있으며, `/test/gatsby-node.test.js` 파일이 실행됩니다.
 
-`token` [string][required]
+1. `.env.test` 파일을 추가합니다.
+2. 해당 파일에 `NOTION_INTEGRATION_TOKEN`, `NOTION_DB_ID` 값을 설정합니다.
+3. `yarn test`를 통해 테스트 결과를 확인할 수 있습니다.
 
-Integration token.
+### 참고
 
-`databaseId` [string][required]
+- [Gatsby Unit Testing](https://www.gatsbyjs.com/docs/how-to/testing/unit-testing/)
 
-The identifier of the database you want to get pages from. The integration identified by provided
-token must have access to the database with given id.
+## 사용 방법
 
-`propsToFrontmatter` [boolean][defaults to **true**]
+먼저 Notion API 호출을 위한 Secret Key와 연결할 Database ID가 필요합니다.
 
-Put Notion page props to Markdown frontmatter. If you set this to **false**, you will need to query `notion` to get page props.
+1. Notion에 로그인 후 새 Integration을 생성합니다. > [Create Link](<(https://www.notion.so/my-integrations)>)
+   - 이미 사용 중인게 있다면, 이 단계는 건너뛰어도 좋습니다.
+   - 더 자세한 내용은 [Notion Guide](https://developers.notion.com/docs/create-a-notion-integration#step-3-save-the-database-id)를 확인해주세요.
+2. Notion에서 연결할 Database를 생성합니다.
+3. Database - [Share] - [Invite] 에서 위에 생성했던 Integration을 초대합니다.
+4. Database Key를 확인합니다
+   > To find a database ID, navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.
+   - 더 자세한 내용은 [Notion Guide](https://developers.notion.com/reference/retrieve-a-database)를 확인해주세요.
+5. `gatsby-config.json`에 아래 설정을 추가합니다.
+   ```javascript
+   plugins: [
+   	{
+   		resolve: `gatsby-source-notion-feely`,
+   		options: {
+   			token: `$INTEGRATION_TOKEN`,
+   			databaseId: `$DATABASE_ID`,
+   			checkPublish: false,
+   		},
+   	},
+   	// ...
+   ];
+   ```
+6. 이제 Gatsby에서 GraphQL로 조회할 수 있습니다!
 
-`lowerTitleLevel` [boolean][defaults to **true**]
-
-Push headings one level down. # becomes ##, ## becomes ###, ### becomes ####. Notion is limited to only 3 levels of heading. You can create ####, #####, etc. - they will not be reflected in Notion, but they will work properly in the Markdown output. Is **true** by default.
-
-## How to query for nodes
-
-You can query for pages with `notion` or grab all of them with `allNotion`. The raw content of the
-page is available under `raw` property.
-
-### Query for all nodes
+### Query
 
 ```graphql
 query {
 	allNotion {
 		edges {
 			node {
-				id
-				parent
-				children
-				internal
-				title
-				properties {
-					My_Prop_1
-					My_Prop_2
-				}
 				archived
+				children {
+					id
+				}
 				createdAt
+				id
+				json
+				parent {
+					id
+					internal {
+						content
+					}
+				}
+				raw {
+					archived
+					children {
+						id
+					}
+					created_by {
+						id
+					}
+					created_time
+					id
+					last_edited_by {
+						id
+					}
+					last_edited_time
+					object
+					parent {
+						database_id
+						type
+					}
+					url
+				}
+				title
 				updatedAt
-				markdown
-				raw
 			}
 		}
 	}
 }
 ```
 
-Alternatively, you can use MarkdownRemark or MDX directly:
+## 감사합니다.
 
-```graphql
-query {
-	allMarkdownRemark {
-		edges {
-			node {
-				frontmatter {
-					title
-				}
-				html
-			}
-		}
-	}
-}
-```
-
-## Node properties
-
-### `id`
-
-Unique page identifier. This is not a Notion page identifier. You can get the Notion page id under `raw.id`.
-
-### `parent` (Node)
-
-Parend Node.
-
-### `children`
-
-Blocks that belong to the page.
-
-### `title` (String)
-
-Page title joined into one string.
-
-### `properties`
-
-Properties of the page. An object with keys representing database columns (snake-cased), and the following value:
-
-#### `id` (String)
-
-Notion column id
-
-#### `key` (String)
-
-Readable name of the column (without snake case).
-
-#### `value` (\*)
-
-Value of the column for the page. Might have different structure depending on the type.
-
-#### `type` (String)
-
-Notion type of the column.
-
-### `archived` (Boolean)
-
-Boolean. Is **true** if the pages was marked removed but not removed permanently.
-
-### `createdAt` (Date)
-
-Date of page creation.
-
-### `updatedAt` (Date)
-
-Date of the last page update.
-
-### `raw` (\*)
-
-Untouched contents of whatever Notion API returned.
-
-### `markdown` (String)
-
-Markdown contents of the page. Limited by blocks currently supported by Notion API. Unsupported blocks turn into HTML comments specifying that Notion marked this block as non-supported.
-
-Since there's not semantic HTML analog for column lists and columns, these Notion blocks are transformed to `<ColumnList>` and `<Column>` components in the markdown. To customize these components, you can write custom components for these and [include them in your `MDXProvider`](https://www.gatsbyjs.com/docs/mdx/importing-and-using-components#make-components-available-globally-as-shortcodes).
-
-## Attaching images via "Files" property
-
-If you want to turn images attached through the "Files" property into file nodes that you can use with gatsby-image, you need to attach remote file nodes to the "Files" property. In the example below, the `propsToFrontmatter` is set to **true** and the **_Hero Image_** Files property is used for images:
-
-```javascript
-// ./gatsby-node.js
-exports.onCreateNode = async ({ node, actions: { createNode }, createNodeId, getCache }) => {
-	if (node.internal.type === "MarkdownRemark") {
-		for (let i = 0; i < node.frontmatter["Hero Image"].length; i++) {
-			const name = node.frontmatter["Hero Image"][i].name
-
-			if (!name) {
-				continue
-			}
-
-			if (name.startsWith("http")) {
-				const fileNode = await createRemoteFileNode({
-					url: name,
-					parentNodeId: node.id,
-					createNode,
-					createNodeId,
-					getCache,
-				})
-
-				if (fileNode) {
-					node.frontmatter["Hero Image"][i].remoteImage___NODE = fileNode.id
-				}
-			}
-		}
-	}
-}
-```
-
-## Current state
-
-- Due to the fact that Notion API only appeared recently, and it is still in beta, some blocks are
-  marked "unsupported". Among others, images cannot be fetched for now
-- Currently, `gatsby-source-notion-api` can only work with one provided database. In further
-  releases, all databases reachable by the Integration will be available for querying
-- ~~Nested blocks are currently skipped. E.g. if a list item has a nested sublist, it's contents will
-  be omitted. This will be fixed in the nearest releases~~ Nested blocks are supported as of `0.4.0`!
-- ~~Only raw content is available. Raw meaning whatever Notion returns. Further releases will aim at
-  providing a more convenient data format apart from the raw one~~ `0.3.0` features support for **archived**, **createdAt**, **updatedAt**, **properties** and **title**.
-
-## 🎉 You did it
-
-Thanks for reaching to the end of the readme!
+끝까지 읽어주셔서 감사합니다.  
+더 멋진 기능을 위한 이슈 생성과 PR은 언제나 환영합니다.

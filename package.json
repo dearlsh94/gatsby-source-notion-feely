@@ -21,14 +21,14 @@
 	],
 	"author": "Ethan",
 	"license": "0BSD",
-	"homepage": "https://github.com/dearlsh94/gatsby-source-notion-api",
+	"homepage": "https://github.com/dearlsh94/gatsby-source-notion-feely",
 	"bugs": {
 		"email": "dearlsh94@gmail.com",
-		"url": "https://github.com/dearlsh94/gatsby-source-notion-api/issues"
+		"url": "https://github.com/dearlsh94/gatsby-source-notion-feely/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+ssh://git@github.com/dearlsh94/gatsby-source-notion-api.git"
+		"url": "git+ssh://git@github.com/dearlsh94/gatsby-source-notion-feely.git"
 	},
 	"dependencies": {
 		"node-fetch": "^2.6.1",
