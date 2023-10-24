@@ -44,6 +44,11 @@ async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersio
 		return result
 	} catch (error) {
 		reporter.error(error)
+		return {
+			results: [],
+			next_cursor: "",
+			has_more: false,
+		}
 	}
 }
 
