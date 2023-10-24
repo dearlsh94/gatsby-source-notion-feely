@@ -89,7 +89,6 @@ exports.getPages = async ({ databaseId, token, notionVersion = "2022-06-28", che
 		for (let page of result.results) {
 			page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache);
 			pages.push(page);
-			break;
 		}
 	}
 
