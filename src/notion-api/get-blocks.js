@@ -47,7 +47,7 @@ async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
 	}
 }
 
-exports.getBlocks = async ({ id, token, notionVersion = "2022-06-28" }, reporter) => {
+async function getBlocks({ id, token, notionVersion = "2022-06-28" }, reporter) {
 	let hasMore = true;
 	let blockContent = [];
 	let startCursor = "";
@@ -67,7 +67,7 @@ exports.getBlocks = async ({ id, token, notionVersion = "2022-06-28" }, reporter
 		for (let childBlock of result.results) {
 			if (childBlock.has_children) {
 				tryCount = 0;
-				childBlock.children = await fetchBlocks({ id: childBlock.id, notionVersion, token }, reporter);
+				childBlock.children = await getBlocks({ id: childBlock.id, notionVersion, token }, reporter);
 			}
 		}
 
@@ -77,4 +77,6 @@ exports.getBlocks = async ({ id, token, notionVersion = "2022-06-28" }, reporter
 	}
 
 	return blockContent;
-};
+}
+
+exports.getBlocks = getBlocks;
