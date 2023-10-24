@@ -97,7 +97,7 @@ plugins: [
 ```
 -  `$DATABASE_ID` 데이터베이스에서는 `is_published` 체크박스가 `true`인 데이터만 조회하며, 여기서 생성된 Node는 `alias` 프로퍼티로 `book` 값을 가집니다.
 -  `$DATABASE_ID_2` 데이터베이스에서는 모든 데이터를 조회하며, 여기서 생성된 Node는 `alias` 프로퍼티로 `movie` 값을 가집니다.
-- 이후 Gatsby에서는 `alias`` 값으로 구분하여 사용할 수 있습니다.
+- 이후 Gatsby에서는 `alias` 값으로 구분하여 사용할 수 있습니다.
 
 ### Query
 
