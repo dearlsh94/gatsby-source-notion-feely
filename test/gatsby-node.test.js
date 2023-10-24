@@ -1,7 +1,6 @@
 import { sourceNodes } from "../gatsby-node"
-import { getPages } from "../src/notion-api/get-pages"
 
-describe("Notion Test", () => {
+describe("Run Test", () => {
 	const mockReporter = {
 		info(message) {
 			console.info(message)
@@ -32,17 +31,19 @@ describe("Notion Test", () => {
 	}
 
 	test(
-		"Get Pages",
+		"Run",
 		async () => {
-			const res = await getPages(
+			const res = await sourceNodes(
+				{
+					reporter: mockReporter,
+					cache: mockCache,
+				},
 				{
 					token: process.env.NOTION_INTEGRATION_TOKEN,
 					databaseId: process.env.NOTION_DB_ID,
 					notionVersion: "2022-06-28",
 					checkPublish: true,
 				},
-				mockReporter,
-				mockCache,
 			)
 
 			expect(res.length).toBeGreaterThan(0)
