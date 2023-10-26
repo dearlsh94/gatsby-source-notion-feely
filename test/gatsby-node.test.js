@@ -42,7 +42,8 @@ describe("Run Test", () => {
 			await sourceNodes(
 				{
 					actions: mockActions,
-					createNodeId: (id) => id,
+					createContentDigest: () => {},
+					createNodeId: () => {},
 					reporter: mockReporter,
 					cache: mockCache,
 				},

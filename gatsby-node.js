@@ -2,11 +2,10 @@ const { getPages } = require("./src/notion-api/get-pages");
 const { getNotionPageProperties } = require("./src/transformers/get-page-properties");
 const { getNotionPageTitle } = require("./src/transformers/get-page-title");
 
-
 exports.sourceNodes = async (
 	{ actions, createContentDigest, createNodeId, reporter, cache },
 	{ token, databaseIds, groups = [], checkPublish = [] },
-	) => {
+) => {
 	const NOTION_NODE_TYPE = "Notion";
 
 	for (let i = 0; i < databaseIds.length; i++) {
@@ -26,12 +25,10 @@ exports.sourceNodes = async (
 				},
 				group: groups[i],
 				title,
+				page: page,
 				properties,
-				archived: page.archived,
 				createdAt: page.created_time,
 				updatedAt: page.last_edited_time,
-				raw: page,
-				json: JSON.stringify(page),
 			});
 		});
 	}
