@@ -36,9 +36,9 @@ async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersio
 			},
 		}).then((res) => res.json());
 
-		const { object, status } = result;
+		const { object, status, code, message } = result;
 		if (object === "error") {
-			throw new Error(`[${status}] ${errorMessage}`);
+			throw new Error(`[${status}-${code}] ${message} ${errorMessage}`);
 		}
 
 		reporter.info(`[SUCCESS] Total Pages > ${result.results.length}`);
@@ -89,6 +89,7 @@ exports.getPages = async ({ databaseId, token, notionVersion = "2022-06-28", che
 		for (let page of result.results) {
 			page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache);
 			pages.push(page);
+			break;
 		}
 	}
 

@@ -19,7 +19,7 @@ async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
 			},
 		}).then((res) => res.json());
 
-		const { object, status } = result;
+		const { object, status, code, message } = result;
 		if (object === "error") {
 			// rate_limited
 			if (status === 429) {
@@ -34,7 +34,7 @@ async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
 					return await fetchBlocks({ id, notionVersion, token }, reporter);
 				}
 			}
-			throw new Error(`[${status}] ${errorMessage}`);
+			throw new Error(`[${status}-${code}] ${message} ${errorMessage}`);
 		}
 
 		return result;
