@@ -5,7 +5,7 @@ const { getNotionPageTitle } = require("./src/transformers/get-page-title");
 
 exports.sourceNodes = async (
 	{ actions, createContentDigest, createNodeId, reporter, cache },
-	{ token, databaseIds, aliases = [], checkPublish = [] },
+	{ token, databaseIds, groups = [], checkPublish = [] },
 	) => {
 	const NOTION_NODE_TYPE = "Notion";
 
@@ -16,8 +16,6 @@ exports.sourceNodes = async (
 			const properties = getNotionPageProperties(page);
 
 			actions.createNode({
-				title,
-				alias: aliases[i],
 				id: createNodeId(`${NOTION_NODE_TYPE}-${page.id}`),
 				parent: null,
 				children: [],
@@ -26,6 +24,8 @@ exports.sourceNodes = async (
 					mediaType: "text/javascript",
 					contentDigest: createContentDigest(page),
 				},
+				group: groups[i],
+				title,
 				properties,
 				archived: page.archived,
 				createdAt: page.created_time,

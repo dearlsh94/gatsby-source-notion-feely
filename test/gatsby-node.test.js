@@ -49,7 +49,7 @@ describe("Run Test", () => {
 				{
 					token: process.env.NOTION_INTEGRATION_TOKEN,
 					databaseIds: [process.env.NOTION_DB_ID, process.env.NOTION_DB_ID_2],
-					aliases: ['Book', 'Movie'],
+					groups: ['Book', 'Movie'],
 					checkPublish: [true, false],
 					notionVersion: "2022-06-28",
 				},
