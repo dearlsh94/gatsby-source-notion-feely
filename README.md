@@ -22,9 +22,10 @@ Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하�
 
 ## 안내
 
-- 마크다운 양식은 지원하고 있지 않습니다. (추후 지원 예정)
+- 현재 마크다운 양식은 지원하고 있지 않습니다. 추후 지원될 수도 있습니다.
 - Notion의 공식 API `2022-06-28` 버전을 사용합니다.
-- Notion의 자체적인 [request-limits](https://developers.notion.com/reference/request-limits) 제한으로 인해 오류가 발생하는 경우 15초 간격으로 최대 4번까지 추가로 호출합니다. (총 5번)
+- Notion의 자체적인 [request-limits](https://developers.notion.com/reference/request-limits) 제한 정책으로 인해, block 정보를 조회하는 과정에서 15초 간격으로 최대 4번까지 추가로 API를 호출할 수 있습니다. (총 5번)
+- 모든 block 정보가 조회된 페이지는 Gatsby 내에 캐싱 됩니다.
 
 ## 설치
 
@@ -38,22 +39,66 @@ or
 npm install --save gatsby-source-notion-feely
 ```
 
-## 필수
+## Required Arguments
+### `token`
+type: `string`  
+노션에서 발급받은 토큰 키 값 입니다.
+### `databaseIds`
+type: `Array<string>`  
+사용할 데이터베이스 ID로 이루어진 배열입니다.
 
-- `token`: string [required]
-  - 노션에서 발급받은 토큰 키
-- `databaseIds`: string[] [required]
-  - 사용할 데이터베이스 ID로 이루어진 배열
 
-## 추가 옵션
-`databaseIds`의 각 데이터베이스마다 동일한 index로 매칭하여 설정됩니다. 사용을 위한 자세한 예시는 아래에서 이어서 더 설명드리겠습니다.
+## Optional Arguments
+`databaseIds`의 각 데이터베이스마다 동일한 index로 매칭하여 설정됩니다. 자세한 예시는 아래에서 더 설명드리겠습니다.
 
-- `aliases`: string[] [default `[]`]
-	- 1개의 데이터베이스에 대해 명시적 구분을 위해 사용할 이름입니다.
+### `groups`
+type: `Array<string>`  
+default: `[]`  
+조회한 데이터베이스들에 대해 명시적 구분을 위해 사용할 이름 배열입니다.
 
-- `checkPublish`: boolean[] [default `[]`]
-  - 사용하는 노션 데이터베이스에 checkbox 타입의 `is_published` 컬럼을 생성해야 합니다.
-  - 해당 옵션이 true일 경우, `is_published` 값이 true인 데이터만 조회합니다.
+### `checkPublish`
+type: `Array<boolean>`  
+default: `[]`  
+사용하는 노션 데이터베이스에 checkbox 타입의 `is_published` 컬럼을 생성해야 합니다. 해당 옵션이 true일 경우, `is_published` 값이 true인 데이터만 조회합니다.
+
+## Return
+
+### `id`
+type: `string`  
+페이지마다 생성된 Gatsby 노드 ID.  
+[Gatsby 공식 문서](https://www.gatsbyjs.com/docs/reference/config-files/actions/#createNode)에서 더 자세히 확인할 수 있습니다.
+
+### `parent`
+type: `string` or `null`  
+부모 노드 ID.
+
+### `children`
+type: `Array<string>`  
+자식 노드 ID의 배열.
+
+### `group`
+type: `string`  
+동일한 데이터베이스 내 페이지들의 그룹 이름.
+
+### `title`  
+type: `string`  
+데이터베이스에 `title`로 설정된 컬럼의 정보.
+
+### `page`  
+데이터베이스에 저장된 페이지 정보.  
+[Notion API 공식 문서](https://developers.notion.com/reference/database)에서 더 자세히 확인할 수 있습니다.
+
+### `properties`  
+해당 페이지에 설정된 데이터베이스 컬럼들의 정보.
+
+### `createdAt`  
+type: `string`  
+데이터베이스가 생성된 ISO 8601 형식의 날짜 및 시간.
+
+### `updatedAt`  
+type: `string`  
+데이터베이스가 마지막으로 변경된 ISO 8601 형식의 날짜 및 시간.
+
 
 ## 설정
 먼저 Notion API 호출을 위한 Secret Key와 연결할 Database ID가 필요합니다.
@@ -89,15 +134,15 @@ plugins: [
 		options: {
 			token: `$INTEGRATION_TOKEN`,
 			databaseId: [`$DATABASE_ID`, `$DATABASE_ID_2`],
-			aliases: [`book`, `movie`]
+			groups: [`book`, `movie`]
 			checkPublish: [true, false],
 		}
 	}
 ]
 ```
--  `$DATABASE_ID` 데이터베이스에서는 `is_published` 체크박스가 `true`인 데이터만 조회하며, 여기서 생성된 Node는 `alias` 프로퍼티로 `book` 값을 가집니다.
--  `$DATABASE_ID_2` 데이터베이스에서는 모든 데이터를 조회하며, 여기서 생성된 Node는 `alias` 프로퍼티로 `movie` 값을 가집니다.
-- 이후 Gatsby에서는 `alias` 값으로 구분하여 사용할 수 있습니다.
+-  `$DATABASE_ID` 데이터베이스에서는 `is_published` 체크박스가 `true`인 데이터만 조회하며, 여기서 생성된 Node는 `group` 프로퍼티로 `book` 값을 가집니다.
+-  `$DATABASE_ID_2` 데이터베이스에서는 모든 데이터를 조회하며, 여기서 생성된 Node는 `group` 프로퍼티로 `movie` 값을 가집니다.
+- 이후 Gatsby에서는 `group` 값으로 구분하여 사용할 수 있습니다.
 
 ### Query
 
@@ -106,41 +151,17 @@ query {
 	allNotion {
 		edges {
 			node {
-				archived
-				children {
-					id
+				id
+				parent
+				children
+				internal
+				group
+				title
+				page
+				properties {
+					...Your Database Columns
 				}
 				createdAt
-				id
-				json
-				parent {
-					id
-					internal {
-						content
-					}
-				}
-				raw {
-					archived
-					children {
-						id
-					}
-					created_by {
-						id
-					}
-					created_time
-					id
-					last_edited_by {
-						id
-					}
-					last_edited_time
-					object
-					parent {
-						database_id
-						type
-					}
-					url
-				}
-				title
 				updatedAt
 			}
 		}
