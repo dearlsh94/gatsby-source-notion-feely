@@ -9,11 +9,13 @@
 
 ## 소개
 
-<p style='color: red; font-weight: 700'>
 주의! 현재 npm 배포 준비중으로, 이 글이 보인다면 아직 npm에 배포는 안되어 있는 것입니다.
-</p>
 
-Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하기 위한 목적의 플러그인입니다. 손쉽게 Gatsby에 Notion Database API를 연결하여 GraphQL로 조회할 수 있습니다. 여러개의 Database 연결도 지원하고 있습니다.
+Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하기 위해 처음 개발된 플러그인입니다.
+
+손쉽게 Gatsby에 Notion 데이터베이스를 연결하여 GraphQL로 조회할 수 있습니다.
+
+다중 데이터베이스 연결도 지원하고 있습니다.
 
 [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api) 플러그인을 fork하여 개발되었습니다.
 
@@ -115,14 +117,14 @@ type: `string`
 
 ## 설정
 
-먼저 Notion API 호출을 위한 Secret Key와 연결할 Database ID가 필요합니다.
+먼저 Notion API 호출을 위한 Secret Key와 연결할 데이터베이스 ID가 필요합니다.
 
-1. Notion에 로그인 후 새 Integration을 생성합니다. > [Create Link](<(https://www.notion.so/my-integrations)>)
+1. Notion에 로그인 후 새 Integration을 생성합니다. > [Create Link](https://www.notion.so/my-integrations)
    - 이미 사용 중인게 있다면, 이 단계는 건너뛰어도 좋습니다.
    - 더 자세한 내용은 [Notion Guide](https://developers.notion.com/docs/create-a-notion-integration#step-3-save-the-database-id)를 확인해주세요.
-2. Notion에서 연결할 Database를 생성합니다.
-3. Database - [Share] - [Invite] 에서 위에 생성했던 Integration을 초대합니다.
-4. Database Key를 확인합니다
+2. Notion에서 연결할 데이터베이스를 생성합니다.
+3. 데이터베이스 - [Share] - [Invite] 에서 위에 생성했던 Integration을 초대합니다.
+4. 데이터베이스 Key를 확인합니다
    > To find a database ID, navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.
    - 더 자세한 내용은 [Notion Guide](https://developers.notion.com/reference/retrieve-a-database)를 확인해주세요.
 5. `gatsby-config.json`에 설정을 추가합니다.
@@ -214,4 +216,4 @@ Jest를 사용하고 있으며, `/test/gatsby-node.test.js` 파일이 실행됩�
 ## 감사합니다.
 
 끝까지 읽어주셔서 감사합니다.  
-더 멋진 기능을 위한 이슈 생성과 PR은 언제나 환영합니다.
+더 멋진 기능을 위한 이슈 생성과 PR을 기다리고 있습니다.
