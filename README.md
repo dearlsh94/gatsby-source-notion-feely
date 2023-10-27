@@ -9,6 +9,10 @@
 
 ## 소개
 
+<p style='color: red; font-weight: 700'>
+주의! 현재 npm 배포 준비중으로, 이 글이 보인다면 아직 npm에 배포는 안되어 있는 것입니다.
+</p>
+
 Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하기 위한 목적의 플러그인입니다. 손쉽게 Gatsby에 Notion Database API를 연결하여 GraphQL로 조회할 수 있습니다. 여러개의 Database 연결도 지원하고 있습니다.
 
 [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api) 플러그인을 fork하여 개발되었습니다.
@@ -40,67 +44,77 @@ npm install --save gatsby-source-notion-feely
 ```
 
 ## Required Arguments
+
 ### `token`
+
 type: `string`  
 노션에서 발급받은 토큰 키 값 입니다.
-### `databaseIds`
-type: `Array<string>`  
-사용할 데이터베이스 ID로 이루어진 배열입니다.
 
+### `databases`
 
-## Optional Arguments
-`databaseIds`의 각 데이터베이스마다 동일한 index로 매칭하여 설정됩니다. 자세한 예시는 아래에서 더 설명드리겠습니다.
+type: `Array<Databases>`
 
-### `groups`
-type: `Array<string>`  
-default: `[]`  
-조회한 데이터베이스들에 대해 명시적 구분을 위해 사용할 이름 배열입니다.
+```typescript
+interface Databases {
+	id: string;
+	name: string;
+	isCheckPublish?: boolean;
+}
+```
 
-### `checkPublish`
-type: `Array<boolean>`  
-default: `[]`  
-사용하는 노션 데이터베이스에 checkbox 타입의 `is_published` 컬럼을 생성해야 합니다. 해당 옵션이 true일 경우, `is_published` 값이 true인 데이터만 조회합니다.
+- `id` : Notion 데이터베이스 ID
+- `name` : 조회한 데이터베이스들에 대해 명시적 구분을 위해 사용할 이름
+- `isCheckPublish` : 사용하는 노션 데이터베이스에 checkbox 타입의 `is_published` 컬럼을 생성해야 합니다. 해당 옵션이 true일 경우, `is_published` 값이 true인 데이터만 조회합니다.
 
 ## Return
 
 ### `id`
+
 type: `string`  
 페이지마다 생성된 Gatsby 노드 ID.  
 [Gatsby 공식 문서](https://www.gatsbyjs.com/docs/reference/config-files/actions/#createNode)에서 더 자세히 확인할 수 있습니다.
 
 ### `parent`
+
 type: `string` or `null`  
 부모 노드 ID.
 
 ### `children`
+
 type: `Array<string>`  
 자식 노드 ID의 배열.
 
-### `group`
-type: `string`  
-동일한 데이터베이스 내 페이지들의 그룹 이름.
+### `databaseName`
 
-### `title`  
+type: `string`  
+설정한 데이터베이스 이름
+
+### `title`
+
 type: `string`  
 데이터베이스에 `title`로 설정된 컬럼의 정보.
 
-### `page`  
+### `page`
+
 데이터베이스에 저장된 페이지 정보.  
 [Notion API 공식 문서](https://developers.notion.com/reference/database)에서 더 자세히 확인할 수 있습니다.
 
-### `properties`  
+### `properties`
+
 해당 페이지에 설정된 데이터베이스 컬럼들의 정보.
 
-### `createdAt`  
+### `createdAt`
+
 type: `string`  
 데이터베이스가 생성된 ISO 8601 형식의 날짜 및 시간.
 
-### `updatedAt`  
+### `updatedAt`
+
 type: `string`  
 데이터베이스가 마지막으로 변경된 ISO 8601 형식의 날짜 및 시간.
 
-
 ## 설정
+
 먼저 Notion API 호출을 위한 Secret Key와 연결할 Database ID가 필요합니다.
 
 1. Notion에 로그인 후 새 Integration을 생성합니다. > [Create Link](<(https://www.notion.so/my-integrations)>)
@@ -118,7 +132,12 @@ type: `string`
    		resolve: `gatsby-source-notion-feely`,
    		options: {
    			token: `$INTEGRATION_TOKEN`,
-   			databaseId: [`$DATABASE_ID`],
+   			databases: [
+   				{
+   					id: `$DATABASE_ID`,
+   					name: `$DATABASE_NAME`,
+   				},
+   			],
    		},
    	},
    	// ...
@@ -127,22 +146,31 @@ type: `string`
 6. 이제 Gatsby에서 GraphQL로 조회할 수 있습니다!
 
 ### 예시
-```
+
+```javascript
 plugins: [
 	{
 		resolve: `gatsby-source-notion-feely`,
 		options: {
 			token: `$INTEGRATION_TOKEN`,
-			databaseId: [`$DATABASE_ID`, `$DATABASE_ID_2`],
-			groups: [`book`, `movie`]
-			checkPublish: [true, false],
-		}
-	}
-]
+			databases: [
+				{
+					id: `$DATABASE_ID`,
+					name: `$DATABASE_NAME`,
+					isCheckPublish: true,
+				},
+				{
+					id: `$DATABASE_ID_2`,
+					name: `$DATABASE_NAME_2`,
+				},
+			],
+		},
+	},
+];
 ```
--  `$DATABASE_ID` 데이터베이스에서는 `is_published` 체크박스가 `true`인 데이터만 조회하며, 여기서 생성된 Node는 `group` 프로퍼티로 `book` 값을 가집니다.
--  `$DATABASE_ID_2` 데이터베이스에서는 모든 데이터를 조회하며, 여기서 생성된 Node는 `group` 프로퍼티로 `movie` 값을 가집니다.
-- 이후 Gatsby에서는 `group` 값으로 구분하여 사용할 수 있습니다.
+
+- `$DATABASE_ID` 데이터베이스에서는 `is_published` 체크박스가 `true`인 페이지를 조회하며, 여기서 생성된 Node는 `databaseName` 프로퍼티로 `$DATABASE_NAME` 값을 가집니다.
+- `$DATABASE_ID_2` 데이터베이스에서는 모든 페이지를 조회하며, 여기서 생성된 Node는 `databaseName` 프로퍼티로 `$DATABASE_NAME_2` 값을 가집니다.
 
 ### Query
 
@@ -155,11 +183,13 @@ query {
 				parent
 				children
 				internal
-				group
+				databaseName
 				title
 				page
 				properties {
-					...Your Database Columns
+					...Your
+					Database
+					Columns
 				}
 				createdAt
 				updatedAt

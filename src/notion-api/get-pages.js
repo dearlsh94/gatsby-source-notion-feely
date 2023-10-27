@@ -3,7 +3,7 @@ const { errorMessage } = require("../error-message");
 const { getBlocks } = require("./get-blocks");
 const { getNotionPageTitle } = require("../transformers/get-page-title");
 
-async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersion }, reporter) {
+async function fetchPage({ cursor, token, databaseId, isCheckPublish, notionVersion }, reporter) {
 	const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
 	const body = {
 		page_size: 100,
@@ -16,7 +16,7 @@ async function fetchPage({ cursor, token, databaseId, checkPublish, notionVersio
 		body.start_cursor = cursor;
 	}
 
-	if (checkPublish) {
+	if (isCheckPublish) {
 		body.filter.and.push({
 			property: "is_published",
 			checkbox: {
@@ -70,7 +70,11 @@ async function fetchPageChildren({ page, token, notionVersion }, reporter, cache
 	return children;
 }
 
-exports.getPages = async ({ databaseId, token, notionVersion = "2022-06-28", checkPublish }, reporter, cache) => {
+exports.getPages = async (
+	{ databaseId, token, notionVersion = "2022-06-28", isCheckPublish = false },
+	reporter,
+	cache,
+) => {
 	let hasMore = true;
 	let startCursor = "";
 
@@ -78,7 +82,7 @@ exports.getPages = async ({ databaseId, token, notionVersion = "2022-06-28", che
 
 	while (hasMore) {
 		const result = await fetchPage(
-			{ cursor: startCursor, token, databaseId, checkPublish, notionVersion },
+			{ cursor: startCursor, token, databaseId, isCheckPublish, notionVersion },
 			reporter,
 			cache,
 		);
@@ -89,7 +93,6 @@ exports.getPages = async ({ databaseId, token, notionVersion = "2022-06-28", che
 		for (let page of result.results) {
 			page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache);
 			pages.push(page);
-			break;
 		}
 	}
 

@@ -49,10 +49,17 @@ describe("Run Test", () => {
 				},
 				{
 					token: process.env.NOTION_INTEGRATION_TOKEN,
-					databaseIds: [process.env.NOTION_DB_ID, process.env.NOTION_DB_ID_2],
-					groups: ['Book', 'Movie'],
-					checkPublish: [true, false],
-					notionVersion: "2022-06-28",
+					databases: [
+						{
+							id: process.env.NOTION_DB_ID,
+							name: 'Book',
+							isCheckPublish: true
+						},
+						{
+							id: process.env.NOTION_DB_ID_2,
+							name: 'Movie'
+						}
+					]
 				},
 			);
 		},

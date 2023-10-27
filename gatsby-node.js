@@ -4,12 +4,16 @@ const { getNotionPageTitle } = require("./src/transformers/get-page-title");
 
 exports.sourceNodes = async (
 	{ actions, createContentDigest, createNodeId, reporter, cache },
-	{ token, databaseIds, groups = [], checkPublish = [] },
+	{ token, databases = [] },
 ) => {
 	const NOTION_NODE_TYPE = "Notion";
 
-	for (let i = 0; i < databaseIds.length; i++) {
-		const pages = await getPages({ token, databaseId: databaseIds[i], checkPublish: checkPublish[i] }, reporter, cache);
+	for (const database of databases) {
+		const pages = await getPages(
+			{ token, databaseId: database.id, isCheckPublish: database.isCheckPublish },
+			reporter,
+			cache,
+		);
 		pages.forEach((page) => {
 			const title = getNotionPageTitle(page);
 			const properties = getNotionPageProperties(page);
@@ -23,7 +27,7 @@ exports.sourceNodes = async (
 					mediaType: "text/javascript",
 					contentDigest: createContentDigest(page),
 				},
-				group: groups[i],
+				databaseName: database.name,
 				title,
 				page: page,
 				properties,
