@@ -18,11 +18,12 @@ Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하�
 
 손쉽게 Gatsby에 Notion 데이터베이스를 연결하여 GraphQL로 조회할 수 있습니다.
 
-다중 데이터베이스 연결도 지원하고 있습니다.
+1개의 Notion 계정과만 연결이 가능하며, 해당 계정 내의 여러 데이터베이스를 연결할 수 있습니다.
+
+[Weezip](https://weezip.treefeely.com) 블로그 서비스에 사용하고 있습니다.
 
 [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api) 플러그인을 fork하여 개발되었습니다.
 
-[Weezip](https://weezip.treefeely.com) 블로그 서비스에 사용하고 있습니다.
 
 ### 참고
 
@@ -57,10 +58,10 @@ type: `string`
 
 ### `databases`
 
-type: `Array<Databases>`
+type: `Array<Database>`
 
 ```typescript
-interface Databases {
+interface Database {
 	id: string;
 	name: string;
 	isCheckPublish?: boolean;
@@ -99,14 +100,10 @@ type: `string`
 type: `string`  
 데이터베이스에 `title`로 설정된 컬럼의 정보.
 
-### `page`
+### `json`
 
-데이터베이스에 저장된 페이지 정보.  
+데이터베이스에 저장된 페이지 정보를 JSON string으로 변환한 정보.
 [Notion API 공식 문서](https://developers.notion.com/reference/database)에서 더 자세히 확인할 수 있습니다.
-
-### `properties`
-
-해당 페이지에 설정된 데이터베이스 컬럼들의 정보.
 
 ### `createdAt`
 
@@ -148,7 +145,7 @@ type: `string`
    	// ...
    ];
    ```
-6. 이제 Gatsby에서 GraphQL로 조회할 수 있습니다!
+6. 이제 Gatsby에서 GraphQL로 조회할 수 있습니다! `JSON.parse(json)` 을 통해 Notion 페이지 객체를 이용할 수 있습니다.
 
 ### 예시
 
@@ -190,12 +187,7 @@ query {
 				internal
 				databaseName
 				title
-				page
-				properties {
-					...Your
-					Database
-					Columns
-				}
+				json
 				createdAt
 				updatedAt
 			}
