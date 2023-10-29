@@ -5,6 +5,7 @@ test
 images
 .eslinrc.js
 .env
+.env.test
 jest-preprocess.js
 jest.config.js
 jest.setup.js
