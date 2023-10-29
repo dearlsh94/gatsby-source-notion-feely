@@ -4,7 +4,8 @@ node_modules
 test
 images
 .eslinrc.js
-jest.preprocess.js
+.env
+jest-preprocess.js
 jest.config.js
 jest.setup.js
 tsconfig.json
