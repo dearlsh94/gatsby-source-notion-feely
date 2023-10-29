@@ -6,6 +6,11 @@
 <h1 align="center">
   Gatsby + Notion = ✨
 </h1>
+<div>
+	<img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000"/>
+	<img src="https://img.shields.io/badge/Gatsby-663399?logo=gatsby&logoColor=fff"/>
+	<img src="https://img.shields.io/badge/Notion-fff?logo=notion&logoColor=000"/>
+</div>
 
 ## 소개
 
