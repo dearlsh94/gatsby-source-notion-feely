@@ -1,68 +1,64 @@
 {
-	"name": "gatsby-source-notion-feely",
-	"version": "1.0.0",
-	"description": "Gatsby plugin that can connect with multiple Notion Database using official API",
-	"main": "index.js",
-	"publishConfig": {
-		"registry": "https://registry-url",
-		"access": "public"
-	},
-	"scripts": {
-		"test": "jest",
-		"format": "prettier --write *.{js,json} **/*.{js,json} **/**/*.{js,json}",
-		"lint": "prettier -c *.{js,json} **/*.{js,json} **/**/*.{js,json}",
-		"commit": "gitmoji --commit",
-		"build": "echo \"No build script setup\""
-	},
-	"keywords": [
-		"gatsby",
-		"gatsby-plugin",
-		"notion",
-		"notion-database"
-	],
-	"author": {
-		"name": "Ethan Lee",
-		"email": "dearlsh94@gmail.com",
-		"url": "https://github.com/dearlsh94"
-	},
-	"homepage": "https://github.com/dearlsh94/gatsby-source-notion-feely",
-	"bugs": {
-		"email": "dearlsh94@gmail.com",
-		"url": "https://github.com/dearlsh94/gatsby-source-notion-feely/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/dearlsh94/gatsby-source-notion-feely"
-	},
-	"license": "0BSD",
-	"dependencies": {
-		"node-fetch": "^2.6.1",
-		"or-pipets": "^1.0.1"
-	},
-	"devDependencies": {
-		"babel-jest": "^29.7.0",
-		"babel-preset-gatsby": "^3.12.0",
-		"dotenv": "^16.3.1",
-		"gitmoji-cli": "^4.1.0",
-		"husky": "^6.0.0",
-		"identity-obj-proxy": "^3.0.0",
-		"jest": "^29.7.0",
-		"prettier": "^2.3.0",
-		"sinon": "^10.0.0",
-		"yarn": "^1.22.10"
-	},
-	"husky": {
-		"hooks": {
-			"pre-push": "yarn lint"
-		}
-	},
-	"prettier": {
-		"printWidth": 120,
-		"trailingComma": "all",
-		"singleQuote": false,
-		"semi": true,
-		"useTabs": true,
-		"tabWidth": 2,
-		"bracketSpacing": true
-	}
+  "name": "gatsby-source-notion-feely",
+  "version": "1.0.0",
+  "description": "Gatsby plugin that can connect with multiple Notion Database using official API",
+  "main": "index.js",
+  "publishConfig": {
+    "registry": "https://registry-url",
+    "access": "public"
+  },
+  "scripts": {
+    "test": "jest",
+    "format": "prettier --write *.{js,json} **/*.{js,json} **/**/*.{js,json}",
+    "lint": "prettier -c *.{js,json} **/*.{js,json} **/**/*.{js,json}",
+    "commit": "gitmoji --commit",
+    "build": "echo \"No build script setup\""
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "notion",
+    "notion-database"
+  ],
+  "author": "Ethan Lee <dearlsh94@gmail.com> (https://github.com/dearlsh94)",
+  "homepage": "https://github.com/dearlsh94/gatsby-source-notion-feely",
+  "bugs": {
+    "url": "https://github.com/dearlsh94/gatsby-source-notion-feely/issues",
+    "email": "dearlsh94@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dearlsh94/gatsby-source-notion-feely.git"
+  },
+  "license": "0BSD",
+  "dependencies": {
+    "node-fetch": "^2.6.1",
+    "or-pipets": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-jest": "^29.7.0",
+    "babel-preset-gatsby": "^3.12.0",
+    "dotenv": "^16.3.1",
+    "gitmoji-cli": "^4.1.0",
+    "husky": "^6.0.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "prettier": "^2.3.0",
+    "sinon": "^10.0.0",
+    "yarn": "^1.22.10"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 120,
+    "trailingComma": "all",
+    "singleQuote": false,
+    "semi": true,
+    "useTabs": true,
+    "tabWidth": 2,
+    "bracketSpacing": true
+  }
 }
