@@ -52,14 +52,14 @@ describe("Run Test", () => {
 					databases: [
 						{
 							id: process.env.NOTION_DB_ID,
-							name: 'Book',
-							isCheckPublish: true
+							name: "Book",
+							isCheckPublish: true,
 						},
 						{
 							id: process.env.NOTION_DB_ID_2,
-							name: 'Movie'
-						}
-					]
+							name: "Movie",
+						},
+					],
 				},
 			);
 		},
