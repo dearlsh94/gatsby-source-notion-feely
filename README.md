@@ -20,10 +20,8 @@ Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하�
 
 1개의 Notion 계정과만 연결이 가능하며, 해당 계정 내의 여러 데이터베이스를 연결할 수 있습니다.
 
-[Weezip](https://weezip.treefeely.com) 블로그 서비스에 사용하고 있습니다.
-
-[orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api) 플러그인을 fork하여 개발되었습니다.
-
+- [Weezip](https://weezip.treefeely.com) 블로그 서비스에 사용하고 있습니다.
+- [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api) 플러그인을 fork하여 개발되었습니다.
 
 ### 참고
 
@@ -32,10 +30,10 @@ Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하�
 
 ## 안내
 
-- 현재 마크다운 양식은 지원하고 있지 않습니다. 추후 지원될 수도 있습니다.
 - Notion의 공식 API `2022-06-28` 버전을 사용합니다.
+- 현재 마크다운 양식은 지원하고 있지 않습니다. 추후 지원될 수도 있습니다.
 - Notion의 자체적인 [request-limits](https://developers.notion.com/reference/request-limits) 제한 정책으로 인해, block 정보를 조회하는 과정에서 15초 간격으로 최대 4번까지 추가로 API를 호출할 수 있습니다. (총 5번)
-- 모든 block 정보가 조회된 페이지는 Gatsby 내에 캐싱 됩니다.
+- 모든 block 정보가 조회된 페이지는 Gatsby 내에 캐싱 됩니다. NOtion에서 페이지가 수정된다면 다시 조회합니다.
 
 ## 설치
 
@@ -54,23 +52,23 @@ npm install --save gatsby-source-notion-feely
 ### `token`
 
 type: `string`  
-노션에서 발급받은 토큰 키 값 입니다.
+Notion에서 발급받은 토큰 키 값 입니다.
 
 ### `databases`
 
 type: `Array<Database>`
 
 ```typescript
-interface Database {
+arguments {
 	id: string;
 	name: string;
-	isCheckPublish?: boolean;
+	pageFilter?: NotionFilterJSON;
 }
 ```
 
 - `id` : Notion 데이터베이스 ID
 - `name` : 조회한 데이터베이스들에 대해 명시적 구분을 위해 사용할 이름
-- `isCheckPublish` : 사용하는 노션 데이터베이스에 checkbox 타입의 `is_published` 컬럼을 생성해야 합니다. 해당 옵션이 true일 경우, `is_published` 값이 true인 데이터만 조회합니다.
+- `pageFilter` : Notion 데이터베이스 필터 쿼리 ([Filter database entries](https://developers.notion.com/reference/post-database-query-filter) 참고)
 
 ## Return
 
@@ -103,7 +101,8 @@ type: `string`
 ### `json`
 
 데이터베이스에 저장된 페이지 정보를 JSON string으로 변환한 정보.
-[Notion API 공식 문서](https://developers.notion.com/reference/database)에서 더 자세히 확인할 수 있습니다.
+
+- [Notion API 공식 문서](https://developers.notion.com/reference/database)에서 더 자세히 확인할 수 있습니다.
 
 ### `createdAt`
 
@@ -145,7 +144,9 @@ type: `string`
    	// ...
    ];
    ```
-6. 이제 Gatsby에서 GraphQL로 조회할 수 있습니다! `JSON.parse(json)` 을 통해 Notion 페이지 객체를 이용할 수 있습니다.
+6. 이제 Gatsby에서 GraphQL로 조회할 수 있습니다!
+
+- `JSON.parse(json)` 을 통해 Notion 페이지 객체를 이용할 수 있습니다.
 
 ### 예시
 
@@ -159,7 +160,12 @@ plugins: [
 				{
 					id: `$DATABASE_ID`,
 					name: `$DATABASE_NAME`,
-					isCheckPublish: true,
+					pageFilter: {
+						property: "is_published",
+						checkbox: {
+							equals: true,
+						},
+					},
 				},
 				{
 					id: `$DATABASE_ID_2`,
@@ -195,6 +201,12 @@ query {
 	}
 }
 ```
+
+## 삭제된 기능
+
+v2.0.0에서 삭제되었습니다.
+
+- Notion 데이터베이스 매개변수 중 `isCheckPublish` 값이 삭제되었습니다. checkbox 타입의 `is_published` 값을 판단할 수 있게 해주는 이 값은 `pageFilter`로 대체되어 더 폭넓은 필터링을 지원할 수 있게 수정되었습니다.
 
 ## 테스트
 
