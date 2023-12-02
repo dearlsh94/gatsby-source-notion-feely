@@ -53,7 +53,12 @@ describe("Run Test", () => {
 						{
 							id: process.env.NOTION_DB_ID,
 							name: "Book",
-							isCheckPublish: true,
+							pageFilter: {
+								property: "is_published",
+								checkbox: {
+									equals: true,
+								},
+							},
 						},
 						{
 							id: process.env.NOTION_DB_ID_2,

@@ -8,11 +8,7 @@ exports.sourceNodes = async (
 	const NOTION_NODE_TYPE = "Notion";
 
 	for (const database of databases) {
-		const pages = await getPages(
-			{ token, databaseId: database.id, isCheckPublish: database.isCheckPublish },
-			reporter,
-			cache,
-		);
+		const pages = await getPages({ token, databaseId: database.id, pageFilter: database.pageFilter }, reporter, cache);
 		pages.forEach((page) => {
 			const title = getNotionPageTitle(page);
 

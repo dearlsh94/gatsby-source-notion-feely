@@ -3,7 +3,7 @@ const { errorMessage } = require("../error-message");
 const { getBlocks } = require("./get-blocks");
 const { getNotionPageTitle } = require("../transformers/get-page-title");
 
-async function fetchPage({ cursor, token, databaseId, isCheckPublish, notionVersion }, reporter) {
+async function fetchPage({ cursor, token, databaseId, pageFilter, notionVersion }, reporter) {
 	const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
 	const body = {
 		page_size: 100,
@@ -16,13 +16,8 @@ async function fetchPage({ cursor, token, databaseId, isCheckPublish, notionVers
 		body.start_cursor = cursor;
 	}
 
-	if (isCheckPublish) {
-		body.filter.and.push({
-			property: "is_published",
-			checkbox: {
-				equals: true,
-			},
-		});
+	if (pageFilter) {
+		body.filter = pageFilter;
 	}
 
 	try {
@@ -71,7 +66,7 @@ async function fetchPageChildren({ page, token, notionVersion }, reporter, cache
 }
 
 exports.getPages = async (
-	{ databaseId, token, notionVersion = "2022-06-28", isCheckPublish = false },
+	{ databaseId, token, notionVersion = "2022-06-28", pageFilter = undefined },
 	reporter,
 	cache,
 ) => {
@@ -82,7 +77,7 @@ exports.getPages = async (
 
 	while (hasMore) {
 		const result = await fetchPage(
-			{ cursor: startCursor, token, databaseId, isCheckPublish, notionVersion },
+			{ cursor: startCursor, token, databaseId, pageFilter, notionVersion },
 			reporter,
 			cache,
 		);
