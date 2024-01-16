@@ -14,11 +14,13 @@
 
 ## 0. 소개
 
-Notion에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하기 위해 개발한 플러그인입니다.
+노션에 아카이빙한 문서들을 Gatsby 정적 블로그로 서비스하기 위해 개발된 플러그인입니다.
 
-손쉽게 Gatsby에 Notion 데이터베이스를 연결하여 GraphQL로 조회할 수 있습니다.
+손쉽게 Gatsby에서 GraphQL로 노션 데이터베이스를 조회할 수 있습니다.
 
-1개의 Notion 계정과만 연결이 가능하며, 해당 계정 내의 여러 데이터베이스와 연결할 수 있습니다.
+Gatsby 정적 사이트에서 사용할 컨텐츠를 위한 CMS로 노션 생각하셨다면, 이 플러그인이 도움이 될 수 있을 것입니다.
+
+1개의 노션 계정만 연결이 가능하며, 해당 계정 내의 여러 데이터베이스와 연결할 수 있습니다.
 
 [orlowdev/gatsby-source-notion-api](https://github.com/orlowdev/gatsby-source-notion-api) 플러그인을 fork하여 개발되었습니다.
 
@@ -38,8 +40,8 @@ Notion API를 사용하고 있으므로 아래 문서를 참고하시면 좋습�
 ## 1. 안내
 
 - 현재 마크다운 양식은 지원하고 있지 않습니다. (추후 지원될 수도 있습니다.)
-- Notion의 공식 API `2022-06-28` 버전을 사용합니다.
-- Notion의 자체적인 [request-limits](https://developers.notion.com/reference/request-limits) 제한 정책으로 인해, block 정보를 조회하는 과정에서 API 호출을 재시도할 수 있습니다.
+- 노션 공식 API `2022-06-28` 버전을 사용합니다.
+- 노션 자체적인 [request-limits](https://developers.notion.com/reference/request-limits) 제한 정책으로 인해, block 정보를 조회하는 과정에서 API 호출을 재시도할 수 있습니다.
 - 모든 block 정보가 조회된 페이지는 캐싱하여 제공합니다.
 
 <br/><br/>
@@ -126,7 +128,7 @@ npm install --save gatsby-source-notion-feely
 ### `token`
 
 type: `string`  
-Notion에서 발급받은 토큰 키 값 입니다.
+노션에서 발급받은 토큰 키 값 입니다.
 
 ### `databases`
 
@@ -226,7 +228,7 @@ type: `string`
 
 v2.0.0에서 삭제되었습니다.
 
-- Notion 데이터베이스 매개변수 중 `isCheckPublish` 값이 삭제되었습니다. checkbox 타입의 `is_published` 값을 판단할 수 있게 해주는 이 값은 `pageFilter`로 대체되어 더 폭넓은 필터링을 지원할 수 있게 수정되었습니다.
+- 노션 데이터베이스 매개변수 중 `isCheckPublish` 값이 삭제되었습니다. checkbox 타입의 `is_published` 값을 판단할 수 있게 해주는 이 값은 `pageFilter`로 대체되어 더 폭넓은 필터링을 지원할 수 있게 수정되었습니다.
 
 <br/><br/>
 
