@@ -52,7 +52,7 @@ Notion API를 사용하고 있으므로 아래 문서를 참고하시면 좋습�
 ### 2.1 설치
 
 ```sh
-yarn add -D gatsby-source-notion-feely
+yarn add gatsby-source-notion-feely
 ```
 
 or
@@ -69,29 +69,29 @@ npm install --save gatsby-source-notion-feely
 
 1. 노션에 로그인 후 새 Integration을 생성합니다. -> [Quick Link](https://www.notion.so/my-integrations)
    - 이미 사용 토큰이 존재한다면, 이 단계는 생략할 수 있습니다.
-   - 더 자세한 내용은 [Notion Build your first integration Guide](https://developers.notion.com/docs/create-a-notion-integration#step-3-save-the-database-id)에서 더 자세히 확인하실 수 있습니다.
+   - [Notion Build your first integration Guide](https://developers.notion.com/docs/create-a-notion-integration#step-3-save-the-database-id)에서 더 자세히 확인하실 수 있습니다.
 2. 노션에서 연결할 데이터베이스를 생성합니다.
 3. 데이터베이스 - [Share] - [Invite] 에서 위에 생성했던 Integration을 초대합니다.
-4. 데이터베이스 Key를 확인합니다
-   - 더 자세한 내용은 [Notion Retrieve a database Guide](https://developers.notion.com/reference/retrieve-a-database)에서 더 자세히 확인하실 수 있습니다.
+4. 데이터베이스 Key를 확인합니다.
+   - [Notion Retrieve a database Guide](https://developers.notion.com/reference/retrieve-a-database)에서 더 자세히 확인하실 수 있습니다.
      > To find a database ID, navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.
 
 ### 2.3 플러그인 설정하기
 
   ```javascript
     plugins: [
-    {
-      resolve: `gatsby-source-notion-feely`,
-      options: {
-        token: `$INTEGRATION_TOKEN`,
-        databases: [
-          {
-            id: `$DATABASE_ID`,
-            name: `$USE_ANY_UNIQUE_VALUE`,
-          },
-        ],
+      {
+        resolve: `gatsby-source-notion-feely`,
+        options: {
+          token: `$INTEGRATION_TOKEN`,
+          databases: [
+            {
+              id: `$DATABASE_ID`,
+              name: `$USE_ANY_UNIQUE_VALUE`,
+            },
+          ],
+        },
       },
-    },
     ];
   ```
 
@@ -163,31 +163,31 @@ arguments {
 
 ```js
 plugins: [
- {
-  resolve: `gatsby-source-notion-feely`,
-  options: {
-   token: `$INTEGRATION_TOKEN`,
-   databases: [
-    {
-      id: `$DATABASE_ID`,
-      name: `$DATABASE_NAME`,
-      pageFilter: {
-        property: "is_published",
-        checkbox: {
-          equals: true,
+  {
+    resolve: `gatsby-source-notion-feely`,
+    options: {
+      token: `$INTEGRATION_TOKEN`,
+      databases: [
+        {
+          id: `$DATABASE_ID`,
+          name: `$DATABASE_NAME`,
+          pageFilter: {
+            property: "is_published",
+            checkbox: {
+              equals: true,
+            },
+          },
         },
-      },
+        {
+          id: `$DATABASE_ID_2`,
+          name: `$DATABASE_NAME_2`,
+          option: {
+            isIncludeChildren: false
+          }
+        },
+      ],
     },
-    {
-      id: `$DATABASE_ID_2`,
-      name: `$DATABASE_NAME_2`,
-      option: {
-        isIncludeChildren: false
-      }
-    },
-   ],
   },
- },
 ];
 ```
 
