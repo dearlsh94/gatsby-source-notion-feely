@@ -65,15 +65,19 @@ async function fetchPageChildren({ page, token, notionVersion }, reporter, cache
 	return children;
 }
 
+const defaultOption = {
+	isIncludeChildren: true,
+};
+
 exports.getPages = async (
-	{ databaseId, token, notionVersion = "2022-06-28", pageFilter = undefined },
+	{ databaseId, token, notionVersion = "2022-06-28", pageFilter = undefined, option = defaultOption },
 	reporter,
 	cache,
 ) => {
+	const { isIncludeChildren } = option;
+	const pages = [];
 	let hasMore = true;
 	let startCursor = "";
-
-	const pages = [];
 
 	while (hasMore) {
 		const result = await fetchPage(
@@ -86,7 +90,12 @@ exports.getPages = async (
 		hasMore = result.has_more;
 
 		for (let page of result.results) {
-			page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache);
+			if (isIncludeChildren) {
+				page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache);
+			} else {
+				page.children = [];
+			}
+
 			pages.push(page);
 		}
 	}
