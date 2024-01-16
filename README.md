@@ -18,7 +18,7 @@
 
 손쉽게 Gatsby에서 GraphQL로 노션 데이터베이스를 조회할 수 있습니다.
 
-Gatsby 정적 사이트에서 사용할 컨텐츠를 위한 CMS로 노션 생각하셨다면, 이 플러그인이 도움이 될 수 있을 것입니다.
+Gatsby 정적 사이트에서 사용할 컨텐츠를 위한 CMS로 노션을 생각하셨다면, 이 플러그인이 도움이 될 수 있을 것입니다.
 
 1개의 노션 계정만 연결이 가능하며, 해당 계정 내의 여러 데이터베이스와 연결할 수 있습니다.
 
@@ -51,7 +51,7 @@ Notion API를 사용하고 있으므로 아래 문서를 참고하시면 좋습�
 ### 2.1 설치
 
 ```sh
-yarn add gatsby-source-notion-feely
+yarn add -D gatsby-source-notion-feely
 ```
 
 or
@@ -64,15 +64,16 @@ npm install --save gatsby-source-notion-feely
 
 ### 2.2 노션 키 발급받기
 
-먼저 노션 API 호출을 위한 Secret Key와 연결할 데이터베이스 ID가 필요합니다. 아래는 발급 단계에 대한 간단한 설명으로 더 자세한 내용은 [Notion Retrieve a database Guide](https://developers.notion.com/reference/retrieve-a-database)를 확인해주세요.
+먼저 노션 API 호출을 위한 Secret Key와 연결할 데이터베이스 ID가 필요합니다. 아래는 발급 단계에 대한 간단한 설명으로 더 자세한 내용은 노션에서 제공하는 세부 가이드를 확인해주세요.
 
-1. 노션에 로그인 후 새 Integration을 생성합니다. > [Create Link](https://www.notion.so/my-integrations)
+1. 노션에 로그인 후 새 Integration을 생성합니다. -> [Quick Link](https://www.notion.so/my-integrations)
    - 이미 사용 중인게 있다면, 이 단계는 건너뛰어도 좋습니다.
    - 더 자세한 내용은 [Notion Build your first integration Guide](https://developers.notion.com/docs/create-a-notion-integration#step-3-save-the-database-id)를 확인해주세요.
 2. 노션에서 연결할 데이터베이스를 생성합니다.
 3. 데이터베이스 - [Share] - [Invite] 에서 위에 생성했던 Integration을 초대합니다.
 4. 데이터베이스 Key를 확인합니다
-   > To find a database ID, navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.
+   - 더 자세한 내용은 [Notion Retrieve a database Guide](https://developers.notion.com/reference/retrieve-a-database)를 확인해주세요.
+     > To find a database ID, navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.
 
 ### 2.3 플러그인 설정하기
 
