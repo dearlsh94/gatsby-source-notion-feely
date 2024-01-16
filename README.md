@@ -65,15 +65,15 @@ npm install --save gatsby-source-notion-feely
 
 ### 2.2 노션 키 발급받기
 
-먼저 노션 API 호출을 위한 Secret Key와 연결할 데이터베이스 ID가 필요합니다. 아래는 발급 단계에 대한 간단한 설명으로 더 자세한 내용은 노션에서 제공하는 세부 가이드를 확인해주세요.
+먼저 노션 API 호출을 위한 Secret Key와 연결할 데이터베이스 ID가 필요합니다. 아래는 발급 단계에 대한 간단한 설명으로 노션에서 제공하는 세부 가이드에서 더 자세히 확인하실 수 있습니다.
 
 1. 노션에 로그인 후 새 Integration을 생성합니다. -> [Quick Link](https://www.notion.so/my-integrations)
-   - 이미 사용 중인게 있다면, 이 단계는 건너뛰어도 좋습니다.
-   - 더 자세한 내용은 [Notion Build your first integration Guide](https://developers.notion.com/docs/create-a-notion-integration#step-3-save-the-database-id)를 확인해주세요.
+   - 이미 사용 토큰이 존재한다면, 이 단계는 생략할 수 있습니다.
+   - 더 자세한 내용은 [Notion Build your first integration Guide](https://developers.notion.com/docs/create-a-notion-integration#step-3-save-the-database-id)에서 더 자세히 확인하실 수 있습니다.
 2. 노션에서 연결할 데이터베이스를 생성합니다.
 3. 데이터베이스 - [Share] - [Invite] 에서 위에 생성했던 Integration을 초대합니다.
 4. 데이터베이스 Key를 확인합니다
-   - 더 자세한 내용은 [Notion Retrieve a database Guide](https://developers.notion.com/reference/retrieve-a-database)를 확인해주세요.
+   - 더 자세한 내용은 [Notion Retrieve a database Guide](https://developers.notion.com/reference/retrieve-a-database)에서 더 자세히 확인하실 수 있습니다.
      > To find a database ID, navigate to the database URL in your Notion workspace. The ID is the string of characters in the URL that is between the slash following the workspace name (if applicable) and the question mark. The ID is a 32 characters alphanumeric string.
 
 ### 2.3 플러그인 설정하기
@@ -119,7 +119,7 @@ npm install --save gatsby-source-notion-feely
   }
   ```
 
-이제 Gatsby에서 GraphQL로 데이터를 조회할 수 있습니다
+이제 Gatsby에서 GraphQL로 데이터를 조회할 수 있습니다.
 
 - `JSON.parse(json)` 을 통해 Notion 페이지 객체를 이용할 수 있습니다.
 
@@ -148,11 +148,12 @@ arguments {
 ```
 
 - `id`
-  - 노션 데이터베이스 ID
+  - 노션 데이터베이스 ID입니다.
 - `name`
-  - 조회한 데이터베이스들에 대해 명시적 구분을 위해 사용할 이름
+  - 조회한 데이터베이스들에 대해 명시적 구분을 위해 사용할 이름입니다.
 - `pageFilter` : default `undefined`
-  - 노션 데이터베이스 필터 쿼리 ([Filter database entries](https://developers.notion.com/reference/post-database-query-filter) 참고)
+  - 노션 데이터베이스 필터 쿼리입니다.
+  - [Filter database entries](https://developers.notion.com/reference/post-database-query-filter)에서 더 자세히 확인하실 수 있습니다.
 - `option`
   - `isIncludeChildren` : default `true`
     - `true`일 경우, 노션 데이터베이스 페이지 내 하위 블럭까지 모두 조회합니다.
@@ -204,7 +205,7 @@ plugins: [
 
 type: `string`  
 페이지마다 생성된 Gatsby 노드 ID.  
-[Gatsby 공식 문서](https://www.gatsbyjs.com/docs/reference/config-files/actions/#createNode)에서 더 자세히 확인할 수 있습니다.
+[Gatsby 공식 문서](https://www.gatsbyjs.com/docs/reference/config-files/actions/#createNode)에서 더 자세히 확인하실 수 있습니다.
 
 ### `parent`
 
@@ -230,7 +231,7 @@ type: `string`
 
 데이터베이스에 저장된 페이지 정보를 JSON string으로 변환한 정보.
 
-- [Notion API 공식 문서](https://developers.notion.com/reference/database)에서 더 자세히 확인할 수 있습니다.
+- [Notion API 공식 문서](https://developers.notion.com/reference/database)에서 더 자세히 확인하실 수 있습니다.
 
 ### `createdAt`
 
