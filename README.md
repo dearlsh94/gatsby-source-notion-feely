@@ -41,6 +41,7 @@ Notion API를 사용하고 있으므로 아래 문서를 참고하시면 좋습�
 
 - 현재 마크다운 양식은 지원하고 있지 않습니다. (추후 지원될 수도 있습니다.)
 - 노션 공식 API `2022-06-28` 버전을 사용합니다.
+- 노션 데이터베이스 API의 페이지 필터 기능을 이용할 수 있습니다.
 - 노션 자체적인 [request-limits](https://developers.notion.com/reference/request-limits) 제한 정책으로 인해, block 정보를 조회하는 과정에서 API 호출을 재시도할 수 있습니다.
 - 모든 block 정보가 조회된 페이지는 캐싱하여 제공합니다.
 
@@ -137,15 +138,27 @@ type: `Array<Database>`
 
 ```typescript
 arguments {
- id: string;
- name: string;
- pageFilter?: NotionFilterJSON;
+  id: string;
+  name: string;
+  pageFilter?: NotionFilterJSON;
+  option?: {
+    isIncludeChildren?: boolean
+  }
 }
 ```
 
-- `id` : 노션 데이터베이스 ID
-- `name` : 조회한 데이터베이스들에 대해 명시적 구분을 위해 사용할 이름
-- `pageFilter` : 노션 데이터베이스 필터 쿼리 ([Filter database entries](https://developers.notion.com/reference/post-database-query-filter) 참고)
+- `id`
+  - 노션 데이터베이스 ID
+- `name`
+  - 조회한 데이터베이스들에 대해 명시적 구분을 위해 사용할 이름
+- `pageFilter` : default `undefined`
+  - 노션 데이터베이스 필터 쿼리 ([Filter database entries](https://developers.notion.com/reference/post-database-query-filter) 참고)
+- `option`
+  - `isIncludeChildren` : default `true`
+    - `true`일 경우, 노션 데이터베이스 페이지 내 하위 블럭까지 모두 조회합니다.
+    - `false`일 경우, 노션 데이터베이스 페이지만 조회합니다.
+
+### 활용 예시
 
 ```js
 plugins: [
@@ -155,18 +168,21 @@ plugins: [
    token: `$INTEGRATION_TOKEN`,
    databases: [
     {
-     id: `$DATABASE_ID`,
-     name: `$DATABASE_NAME`,
-     pageFilter: {
-      property: "is_published",
-      checkbox: {
-       equals: true,
+      id: `$DATABASE_ID`,
+      name: `$DATABASE_NAME`,
+      pageFilter: {
+        property: "is_published",
+        checkbox: {
+          equals: true,
+        },
       },
-     },
     },
     {
-     id: `$DATABASE_ID_2`,
-     name: `$DATABASE_NAME_2`,
+      id: `$DATABASE_ID_2`,
+      name: `$DATABASE_NAME_2`,
+      option: {
+        isIncludeChildren: false
+      }
     },
    ],
   },
@@ -174,8 +190,11 @@ plugins: [
 ];
 ```
 
-- `$DATABASE_ID` 데이터베이스에서는 `is_published` 체크박스가 `true`인 페이지를 조회하며, 여기서 생성된 Node는 `databaseName` 프로퍼티로 `$DATABASE_NAME` 값을 가집니다.
-- `$DATABASE_ID_2` 데이터베이스에서는 모든 페이지를 조회하며, 여기서 생성된 Node는 `databaseName` 프로퍼티로 `$DATABASE_NAME_2` 값을 가집니다.
+1. `$INTEGRATION_TOKEN`으로 노션 연결
+2. `$DATABASE_ID` 데이터베이스 조회
+   1. Notion API 필터를 적용해 `is_published` 체크박스가 선택된 페이지만 조회합니다.
+3. `$DATABASE_ID_2` 데이터베이스 조회
+   1. 페이지 내 하위 블럭은 조회하지 않고, 페이지 정보만 조회합니다.
 
 <br/><br/>
 
@@ -189,18 +208,18 @@ type: `string`
 
 ### `parent`
 
-type: `string` or `null`  
-부모 노드 ID.
+type: `null`  
+부모 노드 ID. 최상위 노드이기 때문에 `null`로 지정됩니다.
 
 ### `children`
 
-type: `Array<string>`  
-자식 노드 ID의 배열.
+type: `[]`  
+자식 노드 ID의 배열. 자식 노드를 가지지 않기 때문에 `[]`로 지정됩니다.
 
 ### `databaseName`
 
 type: `string`  
-설정한 데이터베이스 이름
+설정한 데이터베이스 이름.
 
 ### `title`
 
