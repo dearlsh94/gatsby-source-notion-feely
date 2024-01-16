@@ -64,8 +64,8 @@ describe("Run Test", () => {
 							id: process.env.NOTION_DB_ID_TEST,
 							name: "Movie",
 							option: {
-								isIncludeChildren: false
-							}
+								isIncludeChildren: false,
+							},
 						},
 					],
 				},
