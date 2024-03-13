@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { errorMessage } from "../error-message";
+import { ERROR_MESSAGE } from "../constants";
 
 function sleep(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -21,7 +21,7 @@ export async function fetchPost(url, options, body) {
 			return data;
 		}
 
-		throw new Error(`[${response.status}-${data.code}] ${data.message} ${errorMessage}`);
+		throw new Error(`[${response.status}-${data.code}] ${data.message} ${ERROR_MESSAGE}`);
 	} catch (error) {
 		throw error;
 	}
@@ -43,7 +43,7 @@ export async function fetchWithRetry(url, options, tryCount = 0) {
 			return fetchWithRetry(url, options, tryCount + 1);
 		}
 
-		throw new Error(`[${response.status}-${data.code}] ${data.message} ${errorMessage}`);
+		throw new Error(`[${response.status}-${data.code}] ${data.message} ${ERROR_MESSAGE}`);
 	} catch (error) {
 		throw error;
 	}

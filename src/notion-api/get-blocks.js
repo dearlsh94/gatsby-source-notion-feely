@@ -1,6 +1,7 @@
 import { fetchWithRetry } from "../util/fetch";
+import { NOTION_API_VERSION } from "../constants";
 
-async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
+async function fetchBlocks({ id, token, cursor }, reporter) {
 	let url = `https://api.notion.com/v1/blocks/${id}/children`;
 	if (cursor) url += `?start_cursor=${cursor}`;
 
@@ -8,7 +9,7 @@ async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
 		return fetchWithRetry(url, {
 			headers: {
 				"Content-Type": "application/json",
-				"Notion-Version": notionVersion,
+				"Notion-Version": NOTION_API_VERSION,
 				Authorization: `Bearer ${token}`,
 			},
 		});
@@ -21,18 +22,18 @@ async function fetchBlocks({ id, notionVersion, token, cursor }, reporter) {
 	}
 }
 
-export async function getBlocks({ id, token, notionVersion = "2022-06-28" }, reporter) {
+export async function getBlocks({ id, token }, reporter) {
 	let hasMore = true;
 	let blockContent = [];
 	let startCursor = "";
 
 	try {
 		while (hasMore) {
-			const result = await fetchBlocks({ id, notionVersion, token, cursor: startCursor }, reporter);
+			const result = await fetchBlocks({ id, token, cursor: startCursor }, reporter);
 
 			for (let childBlock of result.results) {
 				if (childBlock.has_children) {
-					childBlock.children = await getBlocks({ id: childBlock.id, notionVersion, token }, reporter);
+					childBlock.children = await getBlocks({ id: childBlock.id, token }, reporter);
 				}
 			}
 

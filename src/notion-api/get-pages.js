@@ -1,8 +1,9 @@
-import { fetchPost } from "../util/fetch";
 import { getBlocks } from "./get-blocks";
-import { getNotionPageTitle } from "../transformers/get-page-title";
+import { fetchPost } from "../util/fetch";
+import { getTitleByNotionPage } from "../util/parse";
+import { NOTION_API_VERSION } from "../constants";
 
-async function fetchPage({ cursor, token, databaseId, pageFilter, notionVersion }, reporter) {
+async function fetchPage({ cursor, token, databaseId, pageFilter }, reporter) {
 	const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
 	const body = {
 		page_size: 100,
@@ -14,7 +15,7 @@ async function fetchPage({ cursor, token, databaseId, pageFilter, notionVersion 
 		return fetchPost(url, {
 			headers: {
 				"Content-Type": "application/json",
-				"Notion-Version": notionVersion,
+				"Notion-Version": NOTION_API_VERSION,
 				Authorization: `Bearer ${token}`,
 			},
 			body: JSON.stringify(body),
@@ -25,13 +26,13 @@ async function fetchPage({ cursor, token, databaseId, pageFilter, notionVersion 
 	}
 }
 
-async function fetchPageChildren({ page, token, notionVersion }, reporter, cache) {
-	const title = getNotionPageTitle(page);
+async function fetchPageChildren({ page, token }, reporter, cache) {
+	const title = getTitleByNotionPage(page);
 	const cacheKey = `notionApiPageChildren:${page.id}:${page.last_edited_time}`;
 
 	let children = await cache.get(cacheKey);
 	if (!children) {
-		children = await getBlocks({ id: page.id, token, notionVersion }, reporter);
+		children = await getBlocks({ id: page.id, token }, reporter);
 		await cache.set(cacheKey, children);
 		reporter.info(`[SUCCESS] fetched page and cached > ${title}`);
 	} else {
@@ -42,9 +43,8 @@ async function fetchPageChildren({ page, token, notionVersion }, reporter, cache
 
 export async function getPages(
 	{
-		databaseId,
 		token,
-		notionVersion = "2022-06-28",
+		databaseId,
 		pageFilter = undefined,
 		option = {
 			isIncludeChildren: true,
@@ -60,18 +60,14 @@ export async function getPages(
 
 	try {
 		while (hasMore) {
-			const result = await fetchPage(
-				{ cursor: startCursor, token, databaseId, pageFilter, notionVersion },
-				reporter,
-				cache,
-			);
+			const result = await fetchPage({ cursor: startCursor, token, databaseId, pageFilter }, reporter, cache);
 			if (!!result.results.length) {
 				reporter.info(`[SUCCESS] total pages > ${result.results.length}`);
 			}
 
 			for (let page of result.results) {
 				if (isIncludeChildren) {
-					page.children = await fetchPageChildren({ page, token, notionVersion }, reporter, cache);
+					page.children = await fetchPageChildren({ page, token }, reporter, cache);
 				}
 				pages.push(page);
 			}
