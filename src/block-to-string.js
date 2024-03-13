@@ -32,7 +32,7 @@ const stylize = pipeExtend(annotateBold)
 	.pipeExtend(annotateLink)
 	.pipeExtend(annotateEquation);
 
-exports.blockToString = (textBlocks) =>
+export const blockToString = (textBlocks) =>
 	textBlocks.reduce((text, textBlock) => {
 		const data = {
 			...textBlock.text,

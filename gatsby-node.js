@@ -1,10 +1,10 @@
-const { getPages } = require("./src/notion-api/get-pages");
-const { getNotionPageTitle } = require("./src/transformers/get-page-title");
+import { getPages } from "./src/notion-api/get-pages";
+import { getNotionPageTitle } from "./src/transformers/get-page-title";
 
-exports.sourceNodes = async (
+export async function sourceNodes(
 	{ actions, createContentDigest, createNodeId, reporter, cache },
 	{ token, databases = [] },
-) => {
+) {
 	const NOTION_NODE_TYPE = "Notion";
 
 	for (const database of databases) {
@@ -33,4 +33,4 @@ exports.sourceNodes = async (
 			});
 		});
 	}
-};
+}
